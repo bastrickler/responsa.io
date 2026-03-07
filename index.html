@@ -213,6 +213,37 @@
     #cta p { font-size: 1rem; color: #8fa5c0; margin-bottom: 40px; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.7; position: relative; }
     .cta-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; position: relative; }
 
+    /* ── JOIN SECTION ── */
+    #join { background: var(--navy); padding: 80px 48px; }
+    #join .section-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .join-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 3px;
+      padding: 24px;
+    }
+    .join-card-label {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 10px;
+    }
+    .join-card ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .join-card ul li { font-size: 0.83rem; color: #8fa5c0; display: flex; gap: 8px; }
+    .join-card ul li span { color: var(--gold); }
+    .join-notice {
+      background: rgba(200,149,42,0.08);
+      border: 1px solid rgba(200,149,42,0.2);
+      border-radius: 3px;
+      padding: 20px 24px;
+    }
+    .join-notice p { font-size: 0.8rem; color: #8fa5c0; line-height: 1.6; }
+    .join-notice strong.label { color: var(--gold); }
+    .join-notice strong.email { color: #c8d8e8; }
+
     /* ── FOOTER ── */
     footer { background: var(--navy-deep); border-top: 1px solid rgba(255,255,255,0.06); padding: 32px 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
     .footer-logo { font-family: 'Libre Baskerville', serif; font-size: 1.1rem; font-weight: 700; color: var(--white); letter-spacing: 0.04em; }
@@ -240,6 +271,8 @@
       .diff-grid { grid-template-columns: 1fr 1fr; }
       footer { padding: 24px; flex-direction: column; text-align: center; }
       .footer-meta { text-align: center; }
+      #join { padding: 64px 24px; }
+      #join .section-inner { grid-template-columns: 1fr; gap: 32px; }
     }
     @media (max-width: 560px) {
       .diff-grid { grid-template-columns: 1fr; }
@@ -266,7 +299,7 @@
     <li><a href="#problem">The Problem</a></li>
     <li><a href="#for-you">For You</a></li>
     <li><a href="#why">Why Responsa</a></li>
-      </ul>
+  </ul>
 </nav>
 
 <!-- AUDIENCE BANNER -->
@@ -402,8 +435,6 @@
         </div>
       </div>
     </div>
-
-
   </div>
 </section>
 
@@ -434,8 +465,8 @@
 </section>
 
 <!-- JOIN -->
-<section id="join" style="background: var(--navy); padding: 80px 48px;">
-  <div class="section-inner" style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;">
+<section id="join">
+  <div class="section-inner">
     <div>
       <div class="section-eyebrow" style="color: var(--gold);">Join the Community</div>
       <h2 class="section-title" style="color: var(--white);">Your expertise<br/>deserves <em>better.</em></h2>
@@ -443,17 +474,17 @@
       <a href="join.html" class="btn-primary">Apply to Join Responsa →</a>
     </div>
     <div style="display: flex; flex-direction: column; gap: 16px;">
-      <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 3px; padding: 24px;">
-        <div style="font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px;">What we look for</div>
-        <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
-          <li style="font-size: 0.83rem; color: #8fa5c0; display: flex; gap: 8px;"><span style="color: var(--gold);">✦</span> Security clearance where required (Secret and above for cleared work)</li>
-          <li style="font-size: 0.83rem; color: #8fa5c0; display: flex; gap: 8px;"><span style="color: var(--gold);">✦</span> 5+ years of relevant federal or DoD experience</li>
-          <li style="font-size: 0.83rem; color: #8fa5c0; display: flex; gap: 8px;"><span style="color: var(--gold);">✦</span> Operating as or willing to form a single-member LLC</li>
-          <li style="font-size: 0.83rem; color: #8fa5c0; display: flex; gap: 8px;"><span style="color: var(--gold);">✦</span> Commitment to outcome-based, professional-grade work</li>
+      <div class="join-card">
+        <div class="join-card-label">What we look for</div>
+        <ul>
+          <li><span>✦</span> Security clearance where required (Secret and above for cleared work)</li>
+          <li><span>✦</span> 5+ years of relevant federal or DoD experience</li>
+          <li><span>✦</span> Operating as or willing to form a single-member LLC</li>
+          <li><span>✦</span> Commitment to outcome-based, professional-grade work</li>
         </ul>
       </div>
-      <div style="background: rgba(200,149,42,0.08); border: 1px solid rgba(200,149,42,0.2); border-radius: 3px; padding: 20px 24px;">
-        <p style="font-size: 0.8rem; color: #8fa5c0; line-height: 1.6;"><strong style="color: var(--gold);">Currently accepting applications.</strong> Early members help shape the community. Reach us at <strong style="color: #c8d8e8;">join@responsa.io</strong></p>
+      <div class="join-notice">
+        <p><strong class="label">Currently accepting applications.</strong> Early members help shape the community. Reach us at <strong class="email">join@responsa.io</strong></p>
       </div>
     </div>
   </div>
@@ -485,4 +516,15 @@
       t.classList.toggle('active', ['contractor','prime'][i] === panel);
     });
     document.querySelectorAll('.aud-panel').forEach(p => p.classList.remove('active'));
-    document.
+    document.getElementById('panel-' + panel).classList.add('active');
+  }
+
+  // Fade-up on scroll
+  const faders = document.querySelectorAll('.fade-up');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  faders.forEach(f => { f.classList.add('animate'); observer.observe(f); });
+</script>
+</body>
+</html>
