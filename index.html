@@ -1,201 +1,602 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Responsa — task order scoping tool (prototype)</title>
-<meta name="description" content="An early prototype tool that helps federal program offices turn Time-and-Materials task orders into scoped, deliverable-based (FFP) or level-of-effort (FPLOE) structures.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Responsa — T&amp;M &rarr; FPLOE/FFP</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#0F1E2E;
-  --slate:#3A4A5C;
-  --muted:#56667A;
-  --paper:#F4F6F8;
-  --white:#FFFFFF;
-  --rule:#C9D1D9;
-  --field:#7C8A99;
-  --accept:#17694D;
-  --accept-tint:#E4F1EB;
-  --redline:#B42318;
-  --focus:#1B5FC1;
-  --mid:#1B5FC1;
-  --mid-tint:#E4ECFB;
-  --amber:#8A5A00;
-  --amber-tint:#FBF0DC;
+  --ink:#0F1E2E; --slate:#3A4A5C; --muted:#56667A; --paper:#F4F6F8; --white:#FFFFFF;
+  --rule:#C9D1D9; --field:#7C8A99; --accept:#17694D; --accept-tint:#E4F1EB;
+  --redline:#B42318; --focus:#1B5FC1; --mid:#1B5FC1; --mid-tint:#E4ECFB;
+  --amber:#8A5A00; --amber-tint:#FBF0DC;
 }
+:root:not([data-theme="light"]){color-scheme:light}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;font-family:'Public Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:17px;line-height:1.6;color:var(--ink);background:var(--paper)}
-h1,h2,h3{font-family:'Archivo','Public Sans',system-ui,sans-serif;font-stretch:110%;margin:0;line-height:1.15;letter-spacing:-0.01em;color:inherit}
-h1{font-size:clamp(2.25rem,4.6vw,3.6rem);font-weight:700}
-h2{font-size:clamp(1.6rem,2.8vw,2.15rem);font-weight:700}
-h3{font-size:1.1rem;font-weight:700;font-stretch:100%}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;font-family:'Public Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:16px;line-height:1.55;color:var(--ink);background:var(--paper);
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+h1,h2,h3,legend{font-family:'Archivo','Public Sans',system-ui,sans-serif;font-stretch:110%;line-height:1.15;letter-spacing:-0.01em;margin:0}
 p{margin:0}
 a{color:inherit}
-:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
-.skip{position:absolute;left:-999px;top:8px;background:var(--ink);color:#fff;padding:10px 16px;z-index:10}
-.skip:focus{left:8px}
-.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
-@media (min-width:760px){.wrap{padding:0 40px}}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+@media (min-width:760px){.wrap{padding:0 32px}}
 
-/* Header */
-.site{border-bottom:1px solid var(--rule);background:var(--paper)}
-.site-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 0}
-.brand{font-family:'Archivo',sans-serif;font-stretch:118%;font-weight:800;font-size:1.3rem;letter-spacing:-0.02em;color:var(--ink);text-decoration:none}
-.nav{display:flex;align-items:center;gap:24px}
-.nav a.link-plain{display:none}
-@media (min-width:640px){.nav a.link-plain{display:inline;color:var(--slate);text-decoration:none;font-size:.95rem}}
-.nav a.link-plain:hover{color:var(--ink);text-decoration:underline;text-underline-offset:4px}
+header.top{position:sticky;top:0;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:1px solid var(--rule)}
+.top-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;flex-wrap:wrap}
+.brand{font-family:'Archivo',sans-serif;font-stretch:118%;font-weight:800;font-size:1.2rem;letter-spacing:-0.02em}
+.brand small{display:block;font-family:'Public Sans',sans-serif;font-stretch:100%;font-weight:500;font-size:.72rem;color:var(--muted);letter-spacing:0}
+.tabs{display:flex;gap:4px;background:#E7EAEE;border-radius:8px;padding:4px;flex-wrap:wrap}
+.tab{border:0;background:transparent;font-family:inherit;font-size:.86rem;font-weight:600;color:var(--muted);padding:8px 12px;border-radius:6px;cursor:pointer}
+.tab[aria-selected="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(15,30,46,.15)}
+.logout-btn{border:0;background:transparent;font-family:inherit;font-size:.82rem;font-weight:600;color:var(--muted);cursor:pointer;text-decoration:underline}
+.logout-btn:hover{color:var(--ink)}
 
-/* Buttons */
-.btn{display:inline-block;padding:12px 20px;border-radius:3px;font-family:inherit;font-weight:600;font-size:1rem;line-height:1.2;text-decoration:none;border:2px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer}
+main{padding:32px 0 80px}
+.view{display:none}
+.view.is-active{display:block}
+
+.intro{max-width:38rem;color:var(--slate);margin-bottom:24px}
+.panel{background:#fff;border:1px solid var(--ink);border-radius:6px;padding:24px;margin-bottom:20px}
+label,.label{display:block;font-weight:600;margin-bottom:6px}
+.hint{color:var(--muted);font-size:.88rem;margin-bottom:8px}
+textarea,select,input[type=text]{width:100%;font-family:inherit;font-size:.98rem;color:var(--ink);background:#fff;border:1.5px solid var(--field);border-radius:4px;padding:11px 12px}
+textarea{resize:vertical;min-height:120px;font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace;font-size:.9rem;line-height:1.5}
+textarea:focus,select:focus,input:focus{border-color:var(--ink)}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:5px;font-family:inherit;font-weight:600;font-size:.98rem;border:2px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer}
 .btn:hover{background:#1C3450;border-color:#1C3450}
+.btn:disabled{opacity:.55;cursor:progress}
 .btn-quiet{background:transparent;color:var(--ink)}
 .btn-quiet:hover{background:var(--ink);color:#fff}
-.btn-sm{padding:8px 14px;font-size:.9rem}
+.btn-sm{padding:6px 12px;font-size:.85rem;border-radius:4px}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 
-/* Hero */
-.hero{padding:56px 0 64px}
-.hero .lead{font-size:1.15rem;color:var(--slate);max-width:34rem;margin-top:20px}
-.hero-actions{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center;margin-top:30px}
-.hero-note{margin-top:22px;color:var(--muted);font-size:.9rem;max-width:34rem}
+.stage-track{display:flex;flex-wrap:wrap;gap:8px 6px;margin:18px 0;font-size:.82rem}
+.stage-chip{padding:5px 11px;border-radius:20px;border:1.5px solid var(--rule);color:var(--muted);font-weight:600}
+.stage-chip.is-active{border-color:var(--focus);color:var(--focus);background:#EAF1FC}
+.stage-chip.is-done{border-color:var(--accept);color:var(--accept);background:var(--accept-tint)}
+.stage-chip.is-error{border-color:var(--redline);color:var(--redline);background:#FBEAE8}
 
-/* Before/after document */
-.doc{background:#fff;border:1px solid var(--ink);border-radius:4px;overflow:hidden;margin-top:48px}
-.doc-bar{background:var(--ink);color:#fff;padding:10px 20px;font-size:.82rem;font-weight:500;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.doc-grid{display:grid;grid-template-columns:1fr;gap:0}
-@media (min-width:820px){.doc-grid{grid-template-columns:1fr 1fr}}
-.doc-col{padding:22px 24px}
-.doc-col+.doc-col{border-top:1px solid var(--rule)}
-@media (min-width:820px){.doc-col+.doc-col{border-top:0;border-left:1px solid var(--rule)}}
-.doc-label{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:10px}
-.posted{font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace;font-size:.88rem;line-height:1.65;color:var(--slate)}
-.strike{text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:var(--redline);color:var(--muted)}
-.card-mini{border:1px solid var(--rule);border-radius:5px;padding:13px 14px;margin-top:10px}
-.card-mini:first-child{margin-top:0}
-.card-mini-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
-.card-mini h4{font-family:'Archivo',sans-serif;font-size:.95rem;font-weight:700}
-.badge{flex:none;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:3px 9px;border-radius:20px}
-.badge-ffp{background:var(--accept-tint);color:var(--accept)}
-.badge-fploe{background:var(--mid-tint);color:var(--mid)}
-.card-mini p{font-size:.87rem;color:var(--slate)}
-.card-mini .accept{color:var(--accept);font-size:.85rem;margin-top:4px}
+.status-line{font-size:.9rem;color:var(--muted);min-height:1.4em;margin:4px 0 14px}
+.status-line.is-error{color:var(--redline);font-weight:600}
 
-/* Sections */
-.sec{padding:64px 0}
-.sec-white{background:#fff}
-.sec-dark{background:var(--ink);color:#DCE3EA}
-.intro{margin-top:16px;color:var(--slate);max-width:34rem}
-.sec-dark .intro{color:#A9B6C4}
+.card{background:#fff;border:1px solid var(--rule);border-radius:6px;margin-bottom:16px;overflow:hidden}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:16px 18px;border-bottom:1px solid var(--rule);background:#FAFBFC}
+.card-title{font-family:'Archivo',sans-serif;font-size:1.1rem;font-weight:700}
+.badge{flex:none;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:4px 10px;border-radius:20px}
+.type-ffp{background:var(--accept-tint);color:var(--accept)}
+.type-fploe{background:var(--mid-tint);color:var(--mid)}
+.type-tm{background:#FBEAE8;color:var(--redline)}
+.card-body{padding:18px}
+.card-body h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin:16px 0 6px}
+.card-body h4:first-child{margin-top:0}
+.card-body p,.card-body li{font-size:.95rem}
+.card-body ul{margin:0;padding-left:20px}
+.mono{font-family:'IBM Plex Mono',monospace;font-size:.95rem;color:var(--ink);font-weight:500}
+.milestone{border-top:1px solid var(--rule);padding:10px 0}
+.milestone:first-child{border-top:0}
+.milestone .mtitle{font-weight:600;font-size:.95rem}
+.milestone .maccept{font-size:.88rem;color:var(--accept);margin-top:2px}
+.lint-flag{background:#FBEAE8;border:1px solid var(--redline);border-radius:4px;padding:10px 12px;font-size:.88rem;color:#7A1810;margin-top:10px}
+.lint-clean{background:var(--accept-tint);border:1px solid var(--accept);border-radius:4px;padding:10px 12px;font-size:.88rem;color:var(--accept);margin-top:10px}
+.plain{background:var(--amber-tint);border:1px solid var(--amber);border-radius:4px;padding:10px 12px;font-size:.88rem;color:var(--amber);margin-top:10px}
 
-.steps{list-style:none;margin:40px 0 0;padding:0;counter-reset:step;display:grid;grid-template-columns:1fr;gap:0}
-.steps li{counter-increment:step;padding:22px 0;border-top:1px solid var(--rule);display:grid;grid-template-columns:2.5rem 1fr;gap:16px;align-items:baseline}
-.steps li:last-child{border-bottom:1px solid var(--rule)}
-.steps li::before{content:counter(step,decimal-leading-zero);font-family:'IBM Plex Mono',monospace;color:var(--muted);font-size:.95rem}
-.steps strong{display:block;font-family:'Archivo',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:4px}
-.steps span{color:var(--slate);font-size:.95rem}
+.readiness-panel{background:#fff;border:1px solid var(--ink);border-radius:6px;padding:20px 22px;margin-bottom:18px}
+.readiness-panel h3{font-size:1rem;margin-bottom:4px}
+.readiness-panel .rp-sub{color:var(--muted);font-size:.88rem;margin-bottom:14px}
+.readiness-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;border-top:1px solid var(--rule);padding:12px 0}
+.readiness-row:first-of-type{border-top:0}
+.readiness-label{font-weight:600;font-size:.92rem;flex:none;width:11rem}
+.readiness-ok{color:var(--accept);font-size:.92rem}
+.readiness-missing{flex:1;background:var(--amber-tint);border:1px solid var(--amber);border-radius:4px;padding:9px 12px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.readiness-missing p{color:#5C3D00;font-size:.88rem;flex:1;min-width:14rem}
+.funnel-placeholder{background:#FAFBFC;border:1px dashed var(--rule);border-radius:6px;padding:16px 18px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.funnel-count{font-family:'Archivo',sans-serif;font-weight:800;font-size:1.3rem;color:var(--muted)}
+.funnel-note{color:var(--muted);font-size:.85rem;max-width:26rem}
 
-.note-box{margin-top:44px;background:var(--amber-tint);border:1px solid var(--amber);border-radius:5px;padding:18px 22px;max-width:36rem}
-.note-box p{font-size:.92rem;color:#5C3D00}
-.note-box p+p{margin-top:8px}
+.review-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;background:#fff;border:1px solid var(--ink);border-radius:6px;padding:14px 18px;margin-top:24px}
+.review-bar p{color:var(--slate);font-size:.9rem}
+.summary-bar{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:18px;font-size:.9rem;color:var(--slate)}
+.summary-bar strong{color:var(--ink)}
 
-.cta-box{background:#fff;border:1px solid var(--ink);border-radius:6px;padding:34px 32px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:24px;margin-top:8px}
-.cta-box h2{font-size:1.4rem}
-.cta-box p{color:var(--slate);margin-top:8px;max-width:28rem}
+.error-box{background:#FBEAE8;border:1.5px solid var(--redline);border-radius:6px;padding:14px 16px;color:#7A1810;font-size:.92rem;margin:14px 0}
 
-footer{border-top:1px solid var(--rule);padding:32px 0}
-.foot-inner{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:center;color:var(--muted);font-size:.85rem}
-.foot-inner a{text-decoration:underline;text-underline-offset:3px}
+.history-item{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:14px 18px;margin-bottom:10px;cursor:pointer}
+.history-item:hover{border-color:var(--ink)}
+.history-item .htitle{font-weight:600}
+.history-item .hmeta{font-size:.82rem;color:var(--muted);margin-top:2px}
+.empty{color:var(--muted);font-style:italic;padding:24px 0}
+
+details.instructions summary{cursor:pointer;font-weight:600;color:var(--muted);font-size:.88rem;margin-bottom:10px}
+details.instructions textarea{min-height:180px;font-size:.82rem}
+.instructions-note{font-size:.82rem;color:var(--muted);margin-top:6px}
+
+.glossary{background:#FAFBFC;border:1px solid var(--rule);border-radius:6px;padding:18px 20px;margin-bottom:20px}
+.glossary h3{font-size:.95rem;margin-bottom:10px}
+.glossary dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 16px;margin:0}
+.glossary dt{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.86rem;white-space:nowrap}
+.glossary dd{margin:0;font-size:.9rem;color:var(--slate)}
+.glossary .gloss-note{margin-top:12px;font-size:.85rem;color:var(--muted)}
+
+footer.notice{max-width:38rem;margin:32px 0 0;font-size:.85rem;color:var(--muted);border-top:1px solid var(--rule);padding-top:16px}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
-<a class="skip" href="#main">Skip to content</a>
 
-<header class="site">
-  <div class="wrap site-inner">
-    <a class="brand" href="index.html">Responsa</a>
-    <nav class="nav" aria-label="Primary">
-      <a class="link-plain" href="#how">How it works</a>
-      <a class="btn btn-sm" href="intake.html">Get in touch</a>
-    </nav>
+<header class="top">
+  <div class="wrap top-inner">
+    <div class="brand">Responsa <small>T&amp;M &rarr; FPLOE/FFP conversion — internal tool</small></div>
+    <div class="row" style="gap:16px">
+      <div class="tabs" role="tablist" aria-label="View">
+        <button class="tab" id="tab-contract" role="tab" aria-selected="true" aria-controls="view-contract">Conversion tool</button>
+        <button class="tab" id="tab-history" role="tab" aria-selected="false" aria-controls="view-history">History</button>
+        <button class="tab" id="tab-instructions" role="tab" aria-selected="false" aria-controls="view-instructions">Pipeline instructions</button>
+      </div>
+      <button class="logout-btn" id="logout-btn" type="button">Log out</button>
+    </div>
   </div>
 </header>
 
-<main id="main">
+<main class="wrap">
 
-  <section class="hero wrap">
-    <h1>Turn a labor-hour task order into a scoped deliverable — before it goes out the door.</h1>
-    <p class="lead">Responsa is an early prototype tool for federal program offices and contracting officers. Paste in a task order and it separates the work into pieces, recommends a firm-fixed-price deliverable or a level-of-effort structure for each, and flags what's missing before you take it to your CO.</p>
-    <div class="hero-actions">
-      <a class="btn" href="intake.html">Tell us about a task order</a>
-      <a class="btn btn-quiet" href="#how">See how it works</a>
+  <!-- CONTRACT TYPE VIEW -->
+  <section class="view is-active" id="view-contract">
+    <p class="intro">Paste a task order that's currently priced as Time-and-Materials (T&amp;M) labor-hour. The pipeline breaks it into work elements and, for each one, recommends and drafts either a Firm-Fixed-Price (FFP) deliverable, a Firm-Fixed-Price Level-of-Effort (FPLOE) structure, or &mdash; only when genuinely warranted &mdash; the justification required to keep it as T&amp;M.</p>
+
+    <div class="glossary">
+      <h3>Quick reference, before you start</h3>
+      <dl>
+        <dt>T&amp;M</dt><dd>Time-and-Materials / labor-hour. You pay for hours worked, regardless of what gets produced. FAR 16.601 says this should only be used when it truly isn't possible to estimate the extent or duration of the work in advance &mdash; it requires a signed determination, not just habit.</dd>
+        <dt>FFP</dt><dd>Firm-Fixed-Price. You pay a set price for a defined deliverable, checked against a stated acceptance criterion. Best fit when the output can be described well enough that someone could say "done" or "not done."</dd>
+        <dt>FPLOE</dt><dd>Firm-Fixed-Price, Level-of-Effort (FAR 16.207). You pay a fixed price for a known, capped amount of effort over a period &mdash; a middle ground for real advisory or support work where the output can't be fully pre-defined, but the amount of effort can be. FAR is explicit that FPLOE still pays for effort expended, not results achieved.</dd>
+        <dt>CLIN / SLIN</dt><dd>A CLIN (contract line item) is where the T&amp;M-vs-FFP switch actually lives. A SLIN (subline item) lets you split one CLIN's work into separately priced, separately delivered pieces without standing up a whole new CLIN structure.</dd>
+      </dl>
+      <p class="gloss-note">None of this is legal advice &mdash; your contracting officer makes the final contract-type determination. This tool is meant to give you a defensible first draft to bring to that conversation, not to replace it.</p>
     </div>
-    <p class="hero-note">No classified information, CUI, export-controlled, or source-selection-sensitive material, please — this is an early-stage prototype.</p>
 
-    <div class="doc">
-      <div class="doc-bar"><span>Example — illustrative only</span><span>Draft</span></div>
-      <div class="doc-grid">
-        <div class="doc-col">
-          <p class="doc-label">As written</p>
-          <p class="posted"><span class="strike">Support periodic performer assessments; assist with program administration; help coordinate meetings and events; provide input to draft briefings and correspondence.</span> Bachelor's degree, 5+ years experience, full-time on site.</p>
-        </div>
-        <div class="doc-col">
-          <p class="doc-label">Broken down</p>
-          <div class="card-mini">
-            <div class="card-mini-head"><h4>Performer risk assessments</h4><span class="badge badge-ffp">FFP</span></div>
-            <p>Quarterly written assessment, delivered per cycle.</p>
-            <p class="accept">Accepted when: findings and recommendation are submitted on schedule.</p>
-          </div>
-          <div class="card-mini">
-            <div class="card-mini-head"><h4>Program coordination support</h4><span class="badge badge-fploe">FPLOE</span></div>
-            <p>Ongoing advisory support, capped hours per month.</p>
-          </div>
-        </div>
+    <div class="panel">
+      <label for="ct-input">Task order (currently T&amp;M / labor-hour)</label>
+      <p class="hint">No classified information, CUI, export-controlled or source-selection-sensitive material.</p>
+      <textarea id="ct-input" placeholder="Paste the task order text, PWS/SOW language, or a labor-category description..."></textarea>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="ct-run-btn">Run conversion pipeline</button>
+        <span class="status-line" id="ct-run-status"></span>
       </div>
+    </div>
+
+    <div class="stage-track" id="ct-stage-track" hidden>
+      <span class="stage-chip" data-stage="segment">1. Segment</span>
+      <span class="stage-chip" data-stage="classify">2. Classify by contract type</span>
+      <span class="stage-chip" data-stage="structure">3. Draft structure</span>
+      <span class="stage-chip" data-stage="lint">4. Lint</span>
+      <span class="stage-chip" data-stage="readiness">5. Readiness check</span>
+      <span class="stage-chip" data-stage="done">6. Ready for review</span>
+    </div>
+
+    <div id="ct-error-area"></div>
+    <div id="ct-results-area"></div>
+  </section>
+
+  <!-- HISTORY VIEW -->
+  <section class="view" id="view-history">
+    <p class="intro">Past runs, stored in this deployment's database. Click one to reopen it.</p>
+    <div id="history-list"><p class="empty">No saved runs yet.</p></div>
+  </section>
+
+  <!-- INSTRUCTIONS VIEW -->
+  <section class="view" id="view-instructions">
+    <p class="intro">This is the actual logic each pipeline stage runs on. Edit it and re-run a real input to test whether a change generalizes, not just whether it fixes one example.</p>
+
+    <div class="panel">
+      <details class="instructions" open>
+        <summary>Stage 1 — Segment</summary>
+        <textarea id="instr-contract-segment"></textarea>
+        <p class="instructions-note">Splits a T&amp;M task order into discrete work elements, without yet deciding contract type.</p>
+      </details>
+    </div>
+    <div class="panel">
+      <details class="instructions" open>
+        <summary>Stage 2 — Classify by contract type</summary>
+        <textarea id="instr-contract-classify"></textarea>
+        <p class="instructions-note">Applies the FAR 16.601 test to recommend FFP, FPLOE, or (rarely) that T&amp;M is genuinely required.</p>
+      </details>
+    </div>
+    <div class="panel">
+      <details class="instructions" open>
+        <summary>Stage 3 — Draft structure</summary>
+        <textarea id="instr-contract-structure"></textarea>
+        <p class="instructions-note">Drafts the deliverables/milestones (FFP), level-of-effort structure (FPLOE), or FAR 16.601 justification (T&amp;M) for one element.</p>
+      </details>
+    </div>
+    <div class="panel">
+      <details class="instructions" open>
+        <summary>Stage 4 — Lint</summary>
+        <textarea id="instr-contract-lint"></textarea>
+        <p class="instructions-note">Flags boilerplate T&amp;M justifications, vague FFP criteria, or FPLOE structures that quietly grade outputs instead of effort.</p>
+      </details>
+    </div>
+    <div class="panel">
+      <details class="instructions" open>
+        <summary>Stage 5 — Readiness check</summary>
+        <textarea id="instr-contract-readiness"></textarea>
+        <p class="instructions-note">Checks the task order for the six fields that gate a consultant match (clearance, citizenship, location/on-site vs. remote, price/rate ceiling, availability window, degree requirement) and drafts a plain-language reminder for anything missing.</p>
+      </details>
+    </div>
+
+    <div class="row">
+      <button class="btn" id="save-instructions">Save changes</button>
+      <button class="btn btn-quiet" id="reset-instructions">Reset to defaults</button>
+      <span class="status-line" id="instr-status"></span>
     </div>
   </section>
 
-  <section class="sec sec-white" id="how">
-    <div class="wrap">
-      <h2>How it works</h2>
-      <p class="intro">No forms to fill out — just describe the work in your own words.</p>
-      <ol class="steps">
-        <li><div><strong>Paste in your task order.</strong> <span>A rough draft, an excerpt, or a description in plain language — whatever you have.</span></div></li>
-        <li><div><strong>It's separated into distinct pieces of work.</strong> <span>Real task orders usually bundle several different kinds of work under one title.</span></div></li>
-        <li><div><strong>Each piece gets a plain-language recommendation.</strong> <span>A defined deliverable, a capped level of effort, or — rarely — a specific reason it may still need to stay time-and-materials.</span></div></li>
-        <li><div><strong>Anything missing gets flagged.</strong> <span>Before the draft goes anywhere, you'll see what still needs an answer.</span></div></li>
-      </ol>
-
-      <div class="note-box">
-        <p><strong>This is an early prototype.</strong> We're testing it with a small number of program offices before it's more broadly available.</p>
-        <p>Nothing produced here is a contract-type determination — that's always your contracting officer's call. This is meant to give you a solid first draft to bring to that conversation.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="sec sec-dark">
-    <div class="wrap">
-      <div class="cta-box">
-        <div>
-          <h2>Have a task order you're trying to unbundle?</h2>
-          <p>Tell us a bit about it and we'll follow up.</p>
-        </div>
-        <a class="btn" href="intake.html">Tell us about a task order</a>
-      </div>
-    </div>
-  </section>
+  <footer class="notice">
+    Internal tool. AI drafts every contract-type recommendation; a human reviews and edits before anything goes to a contracting officer. Contract-type recommendations (FFP/FPLOE/T&amp;M) are a starting draft for your contracting officer's determination, not a substitute for it.
+  </footer>
 
 </main>
 
-<footer>
-  <div class="wrap foot-inner">
-    <span>&copy; Responsa. Prototype — not yet in production.</span>
-    <a href="intake.html">Get in touch</a>
-  </div>
-</footer>
+<script>
+(function () {
+  "use strict";
 
+  // ---------- Small helpers ----------
+  function $(id) { return document.getElementById(id); }
+  function el(tag, attrs, children) {
+    var e = document.createElement(tag);
+    if (attrs) for (var k in attrs) { if (k === "class") e.className = attrs[k]; else if (k === "html") e.innerHTML = attrs[k]; else e.setAttribute(k, attrs[k]); }
+    (children || []).forEach(function (c) { if (c) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return e;
+  }
+  function ctypeClass(t) { return t === "FFP" ? "type-ffp" : t === "FPLOE" ? "type-fploe" : "type-tm"; }
+  function ctypeLabel(t) { return t === "FFP" ? "FFP" : t === "FPLOE" ? "FPLOE" : "T&M required"; }
+
+  var instr = {}; // populated from /api/instructions on boot
+
+  // ---------- Auth ----------
+  function goToLogin() { window.location.href = "/login.html"; }
+
+  $("logout-btn").addEventListener("click", function () {
+    fetch("/api/logout", { method: "POST" }).then(goToLogin).catch(goToLogin);
+  });
+
+  // ---------- API helpers ----------
+  function apiFetch(url, options) {
+    return fetch(url, Object.assign({ headers: { "Content-Type": "application/json" } }, options || {}))
+      .then(function (res) {
+        if (res.status === 401) { goToLogin(); return Promise.reject({ code: "not_authorized", message: "Session expired." }); }
+        return res.json().then(function (data) {
+          if (!res.ok) return Promise.reject(Object.assign({ code: (data && data.error) || "request_failed" }, data));
+          return data;
+        });
+      });
+  }
+
+  function runStage(stage, payload, label) {
+    return apiFetch("/api/run-stage", { method: "POST", body: JSON.stringify({ stage: stage, payload: payload }) })
+      .then(function (data) { return data.data; })
+      .catch(function (e) { e._label = label; throw e; });
+  }
+
+  function errorCopy(e) {
+    switch (e.code) {
+      case "not_authorized": return "Your session has expired. Redirecting to sign in...";
+      case "invalid_stage": return "Internal error: unknown pipeline stage.";
+      case "stage_failed": return "The model's reply for " + (e._label || "a step") + " couldn't be processed (" + (e.message || "unknown error") + "). Try running again.";
+      default: return "Something went wrong during " + (e._label || "the pipeline") + ". You can try again.";
+    }
+  }
+
+  // ---------- Tabs ----------
+  var tabs = [
+    { btn: $("tab-contract"), view: $("view-contract") },
+    { btn: $("tab-history"), view: $("view-history") },
+    { btn: $("tab-instructions"), view: $("view-instructions") }
+  ];
+  tabs.forEach(function (t) {
+    t.btn.addEventListener("click", function () {
+      tabs.forEach(function (o) {
+        o.btn.setAttribute("aria-selected", String(o === t));
+        o.view.classList.toggle("is-active", o === t);
+      });
+      if (t.view.id === "view-history") renderHistory();
+    });
+  });
+
+  // ---------- Instructions view ----------
+  function loadInstructionsUI() {
+    $("instr-contract-segment").value = instr.contract_segment || "";
+    $("instr-contract-classify").value = instr.contract_classify || "";
+    $("instr-contract-structure").value = instr.contract_structure || "";
+    $("instr-contract-lint").value = instr.contract_lint || "";
+    $("instr-contract-readiness").value = instr.contract_readiness || "";
+  }
+  function loadInstructionsFromServer() {
+    return apiFetch("/api/instructions", { method: "GET" }).then(function (data) {
+      instr = data.instructions || {};
+      loadInstructionsUI();
+    }).catch(function () {});
+  }
+  $("save-instructions").addEventListener("click", function () {
+    instr.contract_segment = $("instr-contract-segment").value;
+    instr.contract_classify = $("instr-contract-classify").value;
+    instr.contract_structure = $("instr-contract-structure").value;
+    instr.contract_lint = $("instr-contract-lint").value;
+    instr.contract_readiness = $("instr-contract-readiness").value;
+    apiFetch("/api/instructions", { method: "POST", body: JSON.stringify({ instructions: instr }) })
+      .then(function () {
+        $("instr-status").textContent = "Saved. New runs will use the updated instructions.";
+        setTimeout(function () { $("instr-status").textContent = ""; }, 4000);
+      })
+      .catch(function () {
+        $("instr-status").textContent = "Couldn't save. Try again.";
+      });
+  });
+  $("reset-instructions").addEventListener("click", function () {
+    loadInstructionsFromServer().then(function () {
+      $("instr-status").textContent = "Reloaded from server (this does not delete a saved override — edit and save to change it).";
+      setTimeout(function () { $("instr-status").textContent = ""; }, 5000);
+    });
+  });
+
+  // ---------- Stage track UI ----------
+  function setStage(trackId, name, state) {
+    var chip = document.querySelector('#' + trackId + ' .stage-chip[data-stage="' + name + '"]');
+    if (!chip) return;
+    chip.classList.remove("is-active", "is-done", "is-error");
+    if (state) chip.classList.add(state);
+  }
+  function resetStages(trackId, names) {
+    names.forEach(function (s) { setStage(trackId, s, null); });
+  }
+
+  // ================= CONTRACT-TYPE CONVERSION PIPELINE =================
+  var CT_STAGES = ["segment", "classify", "structure", "lint", "readiness", "done"];
+  var READINESS_FIELD_ORDER = ["clearance", "citizenship", "location", "price_ceiling", "availability", "degree"];
+
+  $("ct-run-btn").addEventListener("click", runContractPipeline);
+
+  function sequential(items, fn) {
+    var out = [];
+    var chain = Promise.resolve();
+    items.forEach(function (item) {
+      chain = chain.then(function () { return fn(item).then(function (r) { out.push(r); }); });
+    });
+    return chain.then(function () { return out; });
+  }
+
+  function runContractPipeline() {
+    var input = $("ct-input").value.trim();
+    $("ct-error-area").innerHTML = "";
+    if (!input) {
+      $("ct-error-area").appendChild(el("div", { class: "error-box" }, ["Paste a T&M task order first."]));
+      return;
+    }
+    var runId = "ct_" + Date.now().toString(36);
+
+    $("ct-run-btn").disabled = true;
+    $("ct-stage-track").hidden = false;
+    resetStages("ct-stage-track", CT_STAGES);
+    $("ct-results-area").innerHTML = "";
+    var statusEl = $("ct-run-status");
+    statusEl.className = "status-line";
+    statusEl.textContent = "Thinking...";
+
+    setStage("ct-stage-track", "segment", "is-active");
+    runStage("contract_segment", input, "segmenting")
+      .then(function (data) {
+        var elements = Array.isArray(data) ? data : [];
+        if (!elements.length) throw { code: "empty_completion", message: "No elements returned", _label: "segmenting" };
+        setStage("ct-stage-track", "segment", "is-done");
+        statusEl.textContent = "Found " + elements.length + " work element" + (elements.length > 1 ? "s" : "") + ". Classifying by contract type...";
+        setStage("ct-stage-track", "classify", "is-active");
+        return sequential(elements, function (e) { return runStage("contract_classify", e, "classifying").then(function (d) { return Object.assign({}, e, d); }); });
+      })
+      .then(function (classified) {
+        setStage("ct-stage-track", "classify", "is-done");
+        statusEl.textContent = "Drafting structure for each element...";
+        setStage("ct-stage-track", "structure", "is-active");
+        return sequential(classified, function (e) { return runStage("contract_structure", e, "structuring").then(function (d) { return Object.assign({}, e, d); }); });
+      })
+      .then(function (structured) {
+        setStage("ct-stage-track", "structure", "is-done");
+        statusEl.textContent = "Running quality check...";
+        setStage("ct-stage-track", "lint", "is-active");
+        return sequential(structured, function (e) { return runStage("contract_lint", e, "linting").then(function (d) { return Object.assign({}, e, { lint: d }); }); });
+      })
+      .then(function (finalElements) {
+        setStage("ct-stage-track", "lint", "is-done");
+        statusEl.textContent = "Checking readiness to match against consultants...";
+        setStage("ct-stage-track", "readiness", "is-active");
+        var summary = finalElements.map(function (e) {
+          return { title: e.title, recommended_type: e.recommended_type, classification_reasoning: e.classification_reasoning };
+        });
+        return runStage("contract_readiness", { task_order: input, elements: summary }, "checking readiness")
+          .then(function (readiness) { return { finalElements: finalElements, readiness: readiness }; });
+      })
+      .then(function (result) {
+        setStage("ct-stage-track", "readiness", "is-done");
+        setStage("ct-stage-track", "done", "is-done");
+        statusEl.textContent = "Done.";
+        renderContractResults(result.finalElements, result.readiness);
+        saveRun(runId, input, result.finalElements, result.readiness);
+      })
+      .catch(function (e) { handlePipelineError(e, "ct-stage-track", { segmenting: "segment", classifying: "classify", structuring: "structure", linting: "lint", "checking readiness": "readiness" }, statusEl, "ct-error-area"); })
+      .finally(function () { $("ct-run-btn").disabled = false; });
+  }
+
+  function renderReadiness(readiness) {
+    if (!readiness || !readiness.fields || !readiness.fields.length) return null;
+    var statedCount = readiness.fields.filter(function (f) { return f.stated; }).length;
+    var panel = el("div", { class: "readiness-panel" }, [
+      el("h3", {}, ["Readiness to match against consultants"]),
+      el("p", { class: "rp-sub" }, [statedCount + " of " + readiness.fields.length + " gating fields stated. Add the missing ones to the task order above, then run again."])
+    ]);
+    READINESS_FIELD_ORDER.forEach(function (key) {
+      var f = readiness.fields.filter(function (x) { return x.key === key; })[0];
+      if (!f) return;
+      var row;
+      if (f.stated) {
+        row = el("div", { class: "readiness-row" }, [
+          el("p", { class: "readiness-label" }, [f.label || key]),
+          el("p", { class: "readiness-ok" }, ["✓ " + (f.value || "Stated")])
+        ]);
+      } else {
+        var addBtn = el("button", { class: "btn btn-sm btn-quiet" }, ["Add prompt to input"]);
+        addBtn.addEventListener("click", function () {
+          var box = $("ct-input");
+          var prefix = box.value && !/\n\n$/.test(box.value) ? "\n\n" : "";
+          box.value = box.value + prefix + "[" + (f.label || key) + "] " + (f.reminder_question || "");
+          box.focus();
+          box.scrollIntoView({ behavior: "smooth", block: "center" });
+        });
+        row = el("div", { class: "readiness-row" }, [
+          el("p", { class: "readiness-label" }, [f.label || key]),
+          el("div", { class: "readiness-missing" }, [
+            el("p", {}, [f.reminder_question || "Not stated."]),
+            addBtn
+          ])
+        ]);
+      }
+      panel.appendChild(row);
+    });
+    return panel;
+  }
+
+  function renderFunnelPlaceholder(readiness) {
+    var statedCount = readiness && readiness.fields ? readiness.fields.filter(function (f) { return f.stated; }).length : 0;
+    var total = readiness && readiness.fields ? readiness.fields.length : 6;
+    return el("div", { class: "funnel-placeholder" }, [
+      el("div", {}, [
+        el("p", { class: "funnel-count" }, ["— of — available consultants"]),
+        el("p", { class: "funnel-note" }, ["Matching against a live consultant pool isn't connected yet. Once it is, this number narrows as gating fields are answered (" + statedCount + " of " + total + " answered here) and as you add optional filters."])
+      ])
+    ]);
+  }
+
+  function renderContractResults(elements, readiness) {
+    var area = $("ct-results-area");
+    area.innerHTML = "";
+
+    var readinessPanel = renderReadiness(readiness);
+    if (readinessPanel) area.appendChild(readinessPanel);
+    area.appendChild(renderFunnelPlaceholder(readiness));
+
+    var ffpCount = elements.filter(function (e) { return e.recommended_type === "FFP"; }).length;
+    var fploeCount = elements.filter(function (e) { return e.recommended_type === "FPLOE"; }).length;
+    var tmCount = elements.filter(function (e) { return e.recommended_type === "TM_required"; }).length;
+    area.appendChild(el("div", { class: "summary-bar" }, [
+      el("p", {}, [el("strong", {}, [String(ffpCount)]), " FFP"]),
+      el("p", {}, [el("strong", {}, [String(fploeCount)]), " FPLOE"]),
+      el("p", {}, [el("strong", {}, [String(tmCount)]), " still need T&M"])
+    ]));
+
+    elements.forEach(function (e) {
+      var body = el("div", { class: "card-body" }, [
+        el("h4", {}, ["What this element is"]),
+        el("p", {}, [e.raw_excerpt || "—"])
+      ]);
+      if (e.plain_language_summary) body.appendChild(el("div", { class: "plain" }, [e.plain_language_summary]));
+      if (e.classification_reasoning) { body.appendChild(el("h4", {}, ["Why this contract type"])); body.appendChild(el("p", {}, [e.classification_reasoning])); }
+
+      if (e.recommended_type === "FFP" && e.deliverables && e.deliverables.length) {
+        body.appendChild(el("h4", {}, ["Deliverables"]));
+        e.deliverables.forEach(function (d) {
+          body.appendChild(el("div", { class: "milestone" }, [
+            el("p", { class: "mtitle" }, [d.title || "Deliverable"]),
+            el("p", { class: "maccept" }, ["Accepted when: " + (d.acceptance_criterion || "—")]),
+            el("p", { class: "hint", style: "margin-top:2px" }, [(d.price_basis || "") + (d.period_of_performance ? " · " + d.period_of_performance : "")])
+          ]));
+        });
+      }
+      if (e.recommended_type === "FPLOE") {
+        body.appendChild(el("h4", {}, ["Level of effort"]));
+        body.appendChild(el("p", { class: "mono" }, [(e.level_of_effort_hours_per_period || "—") + " hours " + (e.period || "")]));
+        if (e.inspection_method) { body.appendChild(el("h4", {}, ["How effort is confirmed"])); body.appendChild(el("p", {}, [e.inspection_method])); }
+        if (e.surge_provision) { body.appendChild(el("h4", {}, ["Surge provision"])); body.appendChild(el("p", {}, [e.surge_provision])); }
+      }
+      if (e.recommended_type === "TM_required") {
+        if (e.far_16_601_justification) { body.appendChild(el("h4", {}, ["FAR 16.601 justification (draft)"])); body.appendChild(el("p", {}, [e.far_16_601_justification])); }
+        if (e.approval_level) { body.appendChild(el("h4", {}, ["Approval required"])); body.appendChild(el("p", {}, [e.approval_level])); }
+      }
+      if (e.clin_note) { body.appendChild(el("h4", {}, ["CLIN / SLIN note"])); body.appendChild(el("p", {}, [e.clin_note])); }
+
+      if (e.lint) {
+        if (e.lint.clean) { body.appendChild(el("div", { class: "lint-clean" }, ["Passed quality check."])); }
+        else { (e.lint.flags || []).forEach(function (f) { body.appendChild(el("div", { class: "lint-flag" }, [f])); }); }
+      }
+
+      area.appendChild(el("div", { class: "card" }, [
+        el("div", { class: "card-head" }, [
+          el("div", {}, [el("p", { class: "card-title" }, [e.title || "Untitled element"])]),
+          el("span", { class: "badge " + ctypeClass(e.recommended_type) }, [ctypeLabel(e.recommended_type)])
+        ]),
+        body
+      ]));
+    });
+
+    area.appendChild(el("div", { class: "review-bar" }, [
+      el("p", {}, ["This is a starting draft for the conversation with your contracting officer, not a contract-type determination."]),
+      el("div", { class: "row" }, [el("button", { class: "btn btn-sm" }, ["Mark reviewed (local only)"])])
+    ]));
+  }
+
+  function handlePipelineError(e, trackId, labelToStage, statusEl, errorAreaId) {
+    var stageKey = labelToStage[e._label] || null;
+    if (stageKey) setStage(trackId, stageKey, "is-error");
+    statusEl.className = "status-line is-error";
+    statusEl.textContent = "Stopped.";
+    $(errorAreaId).appendChild(el("div", { class: "error-box" }, [errorCopy(e)]));
+  }
+
+  // ---------- Persistence ----------
+  function saveRun(id, input, items, readiness) {
+    apiFetch("/api/runs", {
+      method: "POST",
+      body: JSON.stringify({ id: id, input: input, elements: items, readiness: readiness })
+    }).catch(function () {});
+  }
+
+  function renderHistory() {
+    var list = $("history-list");
+    apiFetch("/api/runs", { method: "GET" }).then(function (data) {
+      var runs = data.runs || [];
+      list.innerHTML = "";
+      if (!runs.length) { list.appendChild(el("p", { class: "empty" }, ["No saved runs yet."])); return; }
+      runs.forEach(function (d) {
+        var preview = (d.input || "").slice(0, 80).replace(/\s+/g, " ");
+        var items = d.elements || [];
+        var item = el("div", { class: "history-item" }, [
+          el("p", { class: "htitle" }, [preview + (d.input && d.input.length > 80 ? "…" : "")]),
+          el("p", { class: "hmeta" }, [items.length + " element(s) · " + new Date(d.created_at).toLocaleString()])
+        ]);
+        item.addEventListener("click", function () {
+          tabs[0].btn.click();
+          $("ct-input").value = d.input || "";
+          $("ct-stage-track").hidden = false;
+          resetStages("ct-stage-track", CT_STAGES);
+          CT_STAGES.forEach(function (s) { setStage("ct-stage-track", s, "is-done"); });
+          renderContractResults(items, d.readiness);
+        });
+        list.appendChild(item);
+      });
+    }).catch(function () {
+      list.innerHTML = "";
+      list.appendChild(el("p", { class: "empty" }, ["Couldn't load history."]));
+    });
+  }
+
+  // ---------- Boot ----------
+  loadInstructionsFromServer();
+})();
+</script>
 </body>
 </html>
