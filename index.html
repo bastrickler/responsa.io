@@ -2,188 +2,237 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Responsa — task order scoping tool (prototype)</title>
-<meta name="description" content="An early prototype tool that helps federal program offices turn Time-and-Materials task orders into scoped, deliverable-based (FFP) or level-of-effort (FPLOE) structures.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Responsa — Requirement to CLIN, before it goes out the door</title>
+<meta name="description" content="Responsa turns a federal requirement into a scoped CLIN structure and a vetted shortlist of independent consultants — before it goes out the door. No price, no vehicle, no brokerage.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#0F1E2E;
-  --slate:#3A4A5C;
-  --muted:#56667A;
-  --paper:#F4F6F8;
-  --white:#FFFFFF;
-  --rule:#C9D1D9;
-  --field:#7C8A99;
-  --accept:#17694D;
-  --accept-tint:#E4F1EB;
-  --redline:#B42318;
-  --focus:#1B5FC1;
-  --mid:#1B5FC1;
-  --mid-tint:#E4ECFB;
-  --amber:#8A5A00;
-  --amber-tint:#FBF0DC;
+  --ink:#0F1E2E; --slate:#3A4A5C; --muted:#56667A; --paper:#F4F6F8; --white:#FFFFFF;
+  --rule:#C9D1D9; --field:#7C8A99; --accept:#17694D; --accept-tint:#E4F1EB;
+  --redline:#B42318; --focus:#1B5FC1; --mid:#1B5FC1; --mid-tint:#E4ECFB;
+  --amber:#8A5A00; --amber-tint:#FBF0DC;
 }
+:root:not([data-theme="light"]){color-scheme:light}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;font-family:'Public Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:17px;line-height:1.6;color:var(--ink);background:var(--paper)}
-h1,h2,h3{font-family:'Archivo','Public Sans',system-ui,sans-serif;font-stretch:110%;margin:0;line-height:1.15;letter-spacing:-0.01em;color:inherit}
-h1{font-size:clamp(2.25rem,4.6vw,3.6rem);font-weight:700}
-h2{font-size:clamp(1.6rem,2.8vw,2.15rem);font-weight:700}
-h3{font-size:1.1rem;font-weight:700;font-stretch:100%}
+html,body{height:100%}
+body{margin:0;font-family:'Public Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:16px;line-height:1.6;color:var(--ink);background:var(--paper);
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+h1,h2,h3{font-family:'Archivo','Public Sans',system-ui,sans-serif;font-stretch:110%;line-height:1.15;letter-spacing:-0.01em;margin:0}
 p{margin:0}
 a{color:inherit}
-:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
-.skip{position:absolute;left:-999px;top:8px;background:var(--ink);color:#fff;padding:10px 16px;z-index:10}
-.skip:focus{left:8px}
-.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
-@media (min-width:760px){.wrap{padding:0 40px}}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+@media (min-width:760px){.wrap{padding:0 32px}}
 
-/* Header */
-.site{border-bottom:1px solid var(--rule);background:var(--paper)}
-.site-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 0}
-.brand{font-family:'Archivo',sans-serif;font-stretch:118%;font-weight:800;font-size:1.3rem;letter-spacing:-0.02em;color:var(--ink);text-decoration:none}
-.nav{display:flex;align-items:center;gap:24px}
-.nav a.link-plain{display:none}
-@media (min-width:640px){.nav a.link-plain{display:inline;color:var(--slate);text-decoration:none;font-size:.95rem}}
-.nav a.link-plain:hover{color:var(--ink);text-decoration:underline;text-underline-offset:4px}
+header.top{position:sticky;top:0;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:1px solid var(--rule)}
+.top-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;flex-wrap:wrap}
+.brand{font-family:'Archivo',sans-serif;font-stretch:118%;font-weight:800;font-size:1.2rem;letter-spacing:-0.02em}
+.brand small{display:block;font-family:'Public Sans',sans-serif;font-stretch:100%;font-weight:500;font-size:.72rem;color:var(--muted);letter-spacing:0}
+nav.top-links{display:flex;gap:22px;font-size:.9rem;font-weight:600}
+nav.top-links a{text-decoration:none;color:var(--slate)}
+nav.top-links a:hover{color:var(--ink);text-decoration:underline}
 
-/* Buttons */
-.btn{display:inline-block;padding:12px 20px;border-radius:3px;font-family:inherit;font-weight:600;font-size:1rem;line-height:1.2;text-decoration:none;border:2px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:5px;font-family:inherit;font-weight:700;font-size:.98rem;border:2px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;text-decoration:none}
 .btn:hover{background:#1C3450;border-color:#1C3450}
 .btn-quiet{background:transparent;color:var(--ink)}
 .btn-quiet:hover{background:var(--ink);color:#fff}
-.btn-sm{padding:8px 14px;font-size:.9rem}
 
-/* Hero */
-.hero{padding:56px 0 64px}
-.hero .lead{font-size:1.15rem;color:var(--slate);max-width:34rem;margin-top:20px}
-.hero-actions{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center;margin-top:30px}
-.hero-note{margin-top:22px;color:var(--muted);font-size:.9rem;max-width:34rem}
+main{padding:0 0 80px}
 
-/* Before/after document */
-.doc{background:#fff;border:1px solid var(--ink);border-radius:4px;overflow:hidden;margin-top:48px}
-.doc-bar{background:var(--ink);color:#fff;padding:10px 20px;font-size:.82rem;font-weight:500;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.doc-grid{display:grid;grid-template-columns:1fr;gap:0}
-@media (min-width:820px){.doc-grid{grid-template-columns:1fr 1fr}}
-.doc-col{padding:22px 24px}
-.doc-col+.doc-col{border-top:1px solid var(--rule)}
-@media (min-width:820px){.doc-col+.doc-col{border-top:0;border-left:1px solid var(--rule)}}
-.doc-label{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:10px}
-.posted{font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace;font-size:.88rem;line-height:1.65;color:var(--slate)}
-.strike{text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:var(--redline);color:var(--muted)}
-.card-mini{border:1px solid var(--rule);border-radius:5px;padding:13px 14px;margin-top:10px}
-.card-mini:first-child{margin-top:0}
-.card-mini-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
-.card-mini h4{font-family:'Archivo',sans-serif;font-size:.95rem;font-weight:700}
-.badge{flex:none;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:3px 9px;border-radius:20px}
-.badge-ffp{background:var(--accept-tint);color:var(--accept)}
-.badge-fploe{background:var(--mid-tint);color:var(--mid)}
-.card-mini p{font-size:.87rem;color:var(--slate)}
-.card-mini .accept{color:var(--accept);font-size:.85rem;margin-top:4px}
+.hero{padding:68px 0 40px;border-bottom:1px solid var(--rule)}
+.hero h1{font-size:2.5rem;max-width:34rem}
+@media (max-width:600px){.hero h1{font-size:1.9rem}}
+.hero .sub{max-width:36rem;color:var(--slate);font-size:1.15rem;margin-top:18px}
+.hero .cta-row{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
+.hero .fine{margin-top:16px;color:var(--muted);font-size:.85rem;max-width:36rem}
 
-/* Sections */
-.sec{padding:64px 0}
-.sec-white{background:#fff}
-.sec-dark{background:var(--ink);color:#DCE3EA}
-.intro{margin-top:16px;color:var(--slate);max-width:34rem}
-.sec-dark .intro{color:#A9B6C4}
+.band{padding:52px 0;border-bottom:1px solid var(--rule)}
+.band h2{font-size:1.5rem;margin-bottom:8px}
+.band .lede{color:var(--slate);max-width:40rem;margin-bottom:28px}
 
-.steps{list-style:none;margin:40px 0 0;padding:0;counter-reset:step;display:grid;grid-template-columns:1fr;gap:0}
-.steps li{counter-increment:step;padding:22px 0;border-top:1px solid var(--rule);display:grid;grid-template-columns:2.5rem 1fr;gap:16px;align-items:baseline}
-.steps li:last-child{border-bottom:1px solid var(--rule)}
-.steps li::before{content:counter(step,decimal-leading-zero);font-family:'IBM Plex Mono',monospace;color:var(--muted);font-size:.95rem}
-.steps strong{display:block;font-family:'Archivo',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:4px}
-.steps span{color:var(--slate);font-size:.95rem}
+.chain{display:flex;flex-wrap:wrap;gap:0;align-items:stretch;margin-top:8px}
+.chain-step{flex:1 1 200px;background:#fff;border:1px solid var(--rule);border-radius:6px;padding:18px;position:relative}
+.chain-step + .chain-step{margin-left:14px}
+@media (max-width:760px){.chain-step + .chain-step{margin-left:0;margin-top:14px}.chain{flex-direction:column}}
+.chain-num{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.78rem;color:var(--muted);margin-bottom:6px}
+.chain-step h3{font-size:1.02rem;margin-bottom:6px}
+.chain-step p{font-size:.92rem;color:var(--slate)}
 
-.note-box{margin-top:44px;background:var(--amber-tint);border:1px solid var(--amber);border-radius:5px;padding:18px 22px;max-width:36rem}
-.note-box p{font-size:.92rem;color:#5C3D00}
-.note-box p+p{margin-top:8px}
+.grid3{display:grid;grid-template-columns:1fr;gap:16px}
+@media (min-width:760px){.grid3{grid-template-columns:1fr 1fr 1fr}}
+.tile{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:20px}
+.tile .badge{display:inline-block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:3px 9px;border-radius:20px;margin-bottom:10px}
+.type-ffp{background:var(--accept-tint);color:var(--accept)}
+.type-fploe{background:var(--mid-tint);color:var(--mid)}
+.type-tm{background:#FBEAE8;color:var(--redline)}
+.tile h3{font-size:1.02rem;margin-bottom:6px}
+.tile p{font-size:.92rem;color:var(--slate)}
 
-.cta-box{background:#fff;border:1px solid var(--ink);border-radius:6px;padding:34px 32px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:24px;margin-top:8px}
-.cta-box h2{font-size:1.4rem}
-.cta-box p{color:var(--slate);margin-top:8px;max-width:28rem}
+.example{background:#fff;border:1px solid var(--ink);border-radius:6px;padding:22px;margin-top:24px}
+.example .ex-label{font-family:'IBM Plex Mono',monospace;font-size:.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+.example .ex-raw{font-family:'IBM Plex Mono',monospace;font-size:.85rem;color:var(--slate);background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:12px;margin-bottom:16px}
+.example .ex-clins{display:flex;flex-direction:column;gap:10px}
+.clin-row{border-top:1px solid var(--rule);padding-top:10px}
+.clin-row:first-child{border-top:0;padding-top:0}
+.clin-row .clin-label{font-family:'IBM Plex Mono',monospace;font-size:.78rem;font-weight:600;color:var(--muted)}
+.clin-row p{font-size:.92rem;margin-top:4px}
+.no-price{margin-top:16px;font-size:.85rem;color:var(--accept);font-weight:600}
 
-footer{border-top:1px solid var(--rule);padding:32px 0}
-.foot-inner{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:center;color:var(--muted);font-size:.85rem}
-.foot-inner a{text-decoration:underline;text-underline-offset:3px}
+.principle-list{display:flex;flex-direction:column;gap:16px;margin-top:8px}
+.principle{display:flex;gap:14px;align-items:flex-start}
+.principle .mark{flex:none;width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:600}
+.principle h3{font-size:1rem;margin-bottom:4px}
+.principle p{font-size:.92rem;color:var(--slate)}
+
+.disclaimer{background:var(--amber-tint);border:1px solid #E3C889;border-radius:6px;padding:18px 20px;font-size:.88rem;color:#5C3E00;margin-top:8px}
+.disclaimer strong{color:#5C3E00}
+
+.closing{padding:60px 0;text-align:center}
+.closing h2{font-size:1.7rem;max-width:32rem;margin:0 auto 14px}
+.closing p{color:var(--slate);max-width:34rem;margin:0 auto 26px}
+
+footer{border-top:1px solid var(--rule);padding:24px 0;color:var(--muted);font-size:.85rem}
+footer .foot-inner{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
 </style>
 </head>
 <body>
-<a class="skip" href="#main">Skip to content</a>
 
-<header class="site">
-  <div class="wrap site-inner">
-    <a class="brand" href="index.html">Responsa</a>
-    <nav class="nav" aria-label="Primary">
-      <a class="link-plain" href="#how">How it works</a>
-      <a class="btn btn-sm" href="intake.html">Get in touch</a>
+<header class="top">
+  <div class="wrap top-inner">
+    <div class="brand">Responsa<small>Requirement &rarr; CLIN, before it goes out the door</small></div>
+    <nav class="top-links">
+      <a href="#how-it-works">How it works</a>
+      <a href="#principles">How we're different</a>
+      <a href="mailto:hello@responsa.io">Get in touch</a>
     </nav>
   </div>
 </header>
 
-<main id="main">
+<main>
 
-  <section class="hero wrap">
-    <h1>Turn a labor-hour task order into a scoped deliverable — before it goes out the door.</h1>
-    <p class="lead">Responsa is an early prototype tool for federal program offices and contracting officers. Paste in a task order and it separates the work into pieces, recommends a firm-fixed-price deliverable or a level-of-effort structure for each, and flags what's missing before you take it to your CO.</p>
-    <div class="hero-actions">
-      <a class="btn" href="intake.html">Tell us about a task order</a>
-      <a class="btn btn-quiet" href="#how">See how it works</a>
-    </div>
-    <p class="hero-note">No classified information, CUI, export-controlled, or source-selection-sensitive material, please — this is an early-stage prototype.</p>
-
-    <div class="doc">
-      <div class="doc-bar"><span>Example — illustrative only</span><span>Draft</span></div>
-      <div class="doc-grid">
-        <div class="doc-col">
-          <p class="doc-label">As written</p>
-          <p class="posted"><span class="strike">Support periodic performer assessments; assist with program administration; help coordinate meetings and events; provide input to draft briefings and correspondence.</span> Bachelor's degree, 5+ years experience, full-time on site.</p>
-        </div>
-        <div class="doc-col">
-          <p class="doc-label">Broken down</p>
-          <div class="card-mini">
-            <div class="card-mini-head"><h4>Performer risk assessments</h4><span class="badge badge-ffp">FFP</span></div>
-            <p>Quarterly written assessment, delivered per cycle.</p>
-            <p class="accept">Accepted when: findings and recommendation are submitted on schedule.</p>
-          </div>
-          <div class="card-mini">
-            <div class="card-mini-head"><h4>Program coordination support</h4><span class="badge badge-fploe">FPLOE</span></div>
-            <p>Ongoing advisory support, capped hours per month.</p>
-          </div>
-        </div>
+  <section class="hero">
+    <div class="wrap">
+      <h1>Scope the requirement. Skip the brokerage.</h1>
+      <p class="sub">Responsa turns a federal requirement into a scoped CLIN structure — and a vetted shortlist of independent consultants and microbusinesses ready to compete for it — before anything goes out the door. We never touch price, and we never become party to the award.</p>
+      <div class="cta-row">
+        <a class="btn" href="mailto:hello@responsa.io?subject=Tell%20us%20about%20a%20requirement">Tell us about a requirement</a>
+        <a class="btn btn-quiet" href="#how-it-works">See how it works</a>
       </div>
+      <p class="fine">Built for program offices and contracting officers weighing whether a role really needs Time-and-Materials, or whether it can move to FFP or FPLOE — and who is tired of paying prime overhead to reach a single qualified person.</p>
     </div>
   </section>
 
-  <section class="sec sec-white" id="how">
+  <section class="band" id="how-it-works">
     <div class="wrap">
       <h2>How it works</h2>
-      <p class="intro">No forms to fill out — just describe the work in your own words.</p>
-      <ol class="steps">
-        <li><div><strong>Paste in your task order.</strong> <span>A rough draft, an excerpt, or a description in plain language — whatever you have.</span></div></li>
-        <li><div><strong>It's separated into distinct pieces of work.</strong> <span>Real task orders usually bundle several different kinds of work under one title.</span></div></li>
-        <li><div><strong>Each piece gets a plain-language recommendation.</strong> <span>A defined deliverable, a capped level of effort, or — rarely — a specific reason it may still need to stay time-and-materials.</span></div></li>
-        <li><div><strong>Anything missing gets flagged.</strong> <span>Before the draft goes anywhere, you'll see what still needs an answer.</span></div></li>
-      </ol>
-
-      <div class="note-box">
-        <p><strong>This is an early prototype.</strong> We're testing it with a small number of program offices before it's more broadly available.</p>
-        <p>Nothing produced here is a contract-type determination — that's always your contracting officer's call. This is meant to give you a solid first draft to bring to that conversation.</p>
+      <p class="lede">One input box. A scoped structure and a shortlist on the other end — nothing in between for a CO to manage.</p>
+      <div class="chain">
+        <div class="chain-step">
+          <div class="chain-num">01</div>
+          <h3>Paste the requirement</h3>
+          <p>A rough need, an existing statement of work, or a labor-hour position description — in whatever contractor jargon it currently uses.</p>
+        </div>
+        <div class="chain-step">
+          <div class="chain-num">02</div>
+          <h3>Positions get identified</h3>
+          <p>Responsa translates GSA-schedule labor categories into plain-language functions, and separates genuinely distinct roles from one role's own bundled duties.</p>
+        </div>
+        <div class="chain-step">
+          <div class="chain-num">03</div>
+          <h3>Each position gets a CLIN structure</h3>
+          <p>FFP where a deliverable is real and checkable, FPLOE where ongoing presence is what's actually needed, T&amp;M flagged as the rare exception it should be.</p>
+        </div>
+        <div class="chain-step">
+          <div class="chain-num">04</div>
+          <h3>A vetted shortlist follows</h3>
+          <p>The same scoping surfaces who in our community of vetted single-person LLCs and microbusinesses is a fit — the CO takes it from there.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="sec sec-dark">
+  <section class="band">
     <div class="wrap">
-      <div class="cta-box">
-        <div>
-          <h2>Have a task order you're trying to unbundle?</h2>
-          <p>Tell us a bit about it and we'll follow up.</p>
+      <h2>Three outcomes, never a price</h2>
+      <p class="lede">Every position lands in one of three contract types. Responsa recommends structure — deliverables, effort, or the rare justified exception — never a rate.</p>
+      <div class="grid3">
+        <div class="tile">
+          <span class="badge type-ffp">FFP</span>
+          <h3>Firm-Fixed-Price</h3>
+          <p>When the output can be defined well enough to check as done or not — a real deliverable with a real acceptance criterion, not one manufactured to look tidy.</p>
         </div>
-        <a class="btn" href="intake.html">Tell us about a task order</a>
+        <div class="tile">
+          <span class="badge type-fploe">FPLOE</span>
+          <h3>Fixed-Price, Level-of-Effort</h3>
+          <p>When the work is real and ongoing but its output can't be fully defined in advance — presence, expressed as a fraction of one full-time role, not raw hours that can drift.</p>
+        </div>
+        <div class="tile">
+          <span class="badge type-tm">T&amp;M</span>
+          <h3>Time-and-Materials</h3>
+          <p>Only when neither the output nor the extent of the work can be estimated with real confidence. FAR 16.601 treats this as the exception — so does Responsa.</p>
+        </div>
+      </div>
+
+      <div class="example">
+        <div class="ex-label">Example</div>
+        <div class="ex-raw">"Cyber Defense Analyst, Level II, IAW PWS 3.2.1 — monitors network alerts, escalates anomalies, and maintains monthly compliance documentation."</div>
+        <div class="ex-clins">
+          <div class="clin-row">
+            <div class="clin-label">CLIN 0001 &middot; FPLOE</div>
+            <p>Reviews incoming network alerts and escalates anything abnormal. fte_fraction 0.75 of one full-time position, effort verified by activity logs — not by results.</p>
+          </div>
+          <div class="clin-row">
+            <div class="clin-label">CLIN 0002 &middot; FFP (companion, genuine)</div>
+            <p>Monthly compliance report, accepted against a defined checklist — a real deliverable already implied by the duties, not one added for appearances.</p>
+          </div>
+        </div>
+        <p class="no-price">No price appears anywhere in this output. That's set later, by competitive quotes among vetted candidates.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="principles">
+    <div class="wrap">
+      <h2>How we're different from a staffing prime</h2>
+      <p class="lede">Responsa is a pre-award vetting and matchmaking layer — not a brokerage, not an employer of record, and never a party to the award.</p>
+      <div class="principle-list">
+        <div class="principle">
+          <div class="mark">1</div>
+          <div>
+            <h3>We never set a price</h3>
+            <p>Every CLIN Responsa drafts describes structure — a deliverable or a level of effort — never a rate or dollar figure. Pricing is set later, by competitive quotes among vetted candidates.</p>
+          </div>
+        </div>
+        <div class="principle">
+          <div class="mark">2</div>
+          <div>
+            <h3>We don't manufacture deliverables</h3>
+            <p>Most ongoing roles are honestly FPLOE, full stop. We only add a companion FFP deliverable when one is genuinely implied by the work — padding one on to look different from a prime is worse than not having one.</p>
+          </div>
+        </div>
+        <div class="principle">
+          <div class="mark">3</div>
+          <div>
+            <h3>We stay pre-award</h3>
+            <p>Responsa scopes the requirement and surfaces a vetted shortlist. The CO awards directly to the consultant or microbusiness — no vehicle, no intermediary, no cut of what the contractor is paid.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing">
+    <div class="wrap">
+      <h2>Have a requirement that's currently priced as T&amp;M?</h2>
+      <p>Paste it in and see whether it belongs there — or whether it's really an FFP deliverable, an FPLOE role, or both.</p>
+      <a class="btn" href="mailto:hello@responsa.io?subject=Tell%20us%20about%20a%20requirement">Tell us about a requirement</a>
+      <div class="wrap" style="margin-top:28px;padding:0">
+        <div class="disclaimer">
+          <strong>Early prototype.</strong> Not suitable for classified, CUI, export-controlled, or source-selection-sensitive material. Tool output is not an official contract-type determination — confirm any recommendation with your contracting office before relying on it.
+        </div>
       </div>
     </div>
   </section>
@@ -192,8 +241,8 @@ footer{border-top:1px solid var(--rule);padding:32px 0}
 
 <footer>
   <div class="wrap foot-inner">
-    <span>&copy; Responsa. Prototype — not yet in production.</span>
-    <a href="intake.html">Get in touch</a>
+    <span>&copy; 2026 Responsa</span>
+    <a href="mailto:hello@responsa.io">hello@responsa.io</a>
   </div>
 </footer>
 
