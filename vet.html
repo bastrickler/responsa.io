@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Responsa — Vetting details</title>
+<meta name="description" content="A few more details Responsa needs to finish vetting your application.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0F1E2E; --slate:#3A4A5C; --muted:#56667A; --paper:#F4F6F8; --white:#FFFFFF;
+  --rule:#C9D1D9; --field:#7C8A99; --accept:#17694D; --accept-tint:#E4F1EB;
+  --redline:#B42318; --focus:#1B5FC1; --amber:#8A5A00; --amber-tint:#FBF0DC;
+}
+:root:not([data-theme="light"]){color-scheme:light}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:'Public Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:16px;line-height:1.6;color:var(--ink);background:var(--paper)}
+h1,h2,h3{font-family:'Archivo','Public Sans',system-ui,sans-serif;font-stretch:110%;line-height:1.15;letter-spacing:-0.01em;margin:0}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:640px;margin:0 auto;padding:0 20px}
+@media (min-width:760px){.wrap{padding:0 32px}}
+header.top{border-bottom:1px solid var(--rule);background:var(--paper)}
+.top-inner{max-width:1080px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media (min-width:760px){.top-inner{padding:14px 32px}}
+.brand{font-family:'Archivo',sans-serif;font-stretch:118%;font-weight:800;font-size:1.2rem;letter-spacing:-0.02em;text-decoration:none;color:var(--ink)}
+main{padding:56px 0 80px}
+h1{font-size:2rem;margin-bottom:14px}
+.sub{color:var(--slate);font-size:1.05rem;margin-bottom:32px}
+.panel{background:#fff;border:1px solid var(--ink);border-radius:6px;padding:26px}
+label{display:block;font-weight:600;margin-bottom:6px;font-size:.92rem}
+.hint{color:var(--muted);font-size:.85rem;margin-bottom:6px}
+.optional{font-weight:500;color:var(--muted)}
+input[type=text],input[type=url]{width:100%;font-family:inherit;font-size:.98rem;color:var(--ink);background:#fff;border:1.5px solid var(--field);border-radius:4px;padding:11px 12px;margin-bottom:18px}
+input:focus{border-color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:5px;font-family:inherit;font-weight:700;font-size:.98rem;border:2px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;text-decoration:none}
+.btn:hover{background:#1C3450;border-color:#1C3450}
+.btn:disabled{opacity:.6;cursor:progress}
+.disclaimer{background:var(--amber-tint);border:1px solid #E3C889;border-radius:6px;padding:16px 18px;font-size:.85rem;color:#5C3E00;margin-top:24px}
+.status-msg{font-size:.9rem;margin-top:14px;display:none}
+.status-msg.is-success{display:block;color:var(--accept);font-weight:600}
+.status-msg.is-error{display:block;color:var(--redline);font-weight:600}
+.hp-field{position:absolute;left:-9999px;top:-9999px}
+.link-error{text-align:center;padding:60px 0}
+footer{border-top:1px solid var(--rule);padding:24px 0;color:var(--muted);font-size:.85rem;margin-top:40px}
+footer .wrap{max-width:1080px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <a class="brand" href="index.html">Responsa</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div id="link-error" class="link-error" style="display:none">
+      <h1>This link looks incomplete.</h1>
+      <p class="sub">Double-check you copied the whole link from the email, or reply to that email and we'll resend it.</p>
+    </div>
+
+    <div id="form-wrap">
+      <h1>A few more details.</h1>
+      <p class="sub">Thanks for applying — you're through initial review. These last few details help us match you against the right requirements. Leave anything blank that doesn't apply to you.</p>
+
+      <div class="panel">
+        <form id="vet-form" novalidate>
+          <label for="resume">Resume link <span class="optional">(a 1-page Google Doc link works well — please make sure it's viewable by anyone with the link)</span></label>
+          <input type="url" id="resume" name="resume" required placeholder="https://docs.google.com/...">
+
+          <label for="business-structure">Business structure <span class="optional">(optional)</span></label>
+          <input type="text" id="business-structure" name="business-structure" placeholder="e.g. single-person LLC, sole proprietor, small team">
+
+          <label for="sam-uei">SAM.gov UEI <span class="optional">(optional — leave blank if you're not registered yet)</span></label>
+          <input type="text" id="sam-uei" name="sam-uei" placeholder="e.g. ABC123DEF456">
+
+          <label for="socio-economic">Set-aside / socio-economic status <span class="optional">(optional)</span></label>
+          <input type="text" id="socio-economic" name="socio-economic" placeholder="e.g. WOSB, SDVOSB, 8(a), HUBZone, none">
+
+          <label for="clearance">Clearance <span class="optional">(optional)</span></label>
+          <input type="text" id="clearance" name="clearance" placeholder="e.g. active Secret, none">
+
+          <label for="citizenship">Citizenship <span class="optional">(optional)</span></label>
+          <input type="text" id="citizenship" name="citizenship" placeholder="e.g. U.S. citizen">
+
+          <label for="degree">Degree <span class="optional">(optional)</span></label>
+          <input type="text" id="degree" name="degree" placeholder="e.g. B.S. Computer Science">
+
+          <label for="rate-range">Rate range <span class="optional">(optional)</span></label>
+          <input type="text" id="rate-range" name="rate-range" placeholder="e.g. $85-110/hr">
+
+          <label for="contract-type">Contract-type experience <span class="optional">(optional)</span></label>
+          <p class="hint">Which contract types have you actually delivered under before?</p>
+          <input type="text" id="contract-type" name="contract-type" placeholder="e.g. FFP, T&M">
+
+          <!-- Honeypot: same pattern as join.html/intake.html. -->
+          <div class="hp-field" aria-hidden="true">
+            <label for="website">Website</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+          </div>
+
+          <button class="btn" type="submit" id="submit-btn">Submit</button>
+          <p class="status-msg" id="status-msg" role="status"></p>
+        </form>
+      </div>
+
+      <div class="disclaimer">
+        <strong>Early access.</strong> Responsa is in limited early release. Please don't include classified, CUI, or export-controlled material in anything you submit here.
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Responsa</span>
+    <a href="mailto:brian@responsa.io">brian@responsa.io</a>
+  </div>
+</footer>
+
+<script>
+// Points at the tool's Vercel project - same note as join.html/intake.html's
+// endpoint constants. Update this if the tool's domain changes.
+var SUBMIT_ENDPOINT = 'https://responsa-app.vercel.app/api/vet-consultant';
+
+var params = new URLSearchParams(window.location.search);
+var applicationId = params.get('id');
+var token = params.get('token');
+
+if (!applicationId || !token) {
+  document.getElementById('link-error').style.display = 'block';
+  document.getElementById('form-wrap').style.display = 'none';
+} else {
+  var form = document.getElementById('vet-form');
+  var submitBtn = document.getElementById('submit-btn');
+  var statusMsg = document.getElementById('status-msg');
+
+  function showStatus(kind, text) {
+    statusMsg.textContent = text;
+    statusMsg.className = 'status-msg is-' + kind;
+  }
+
+  function mailtoFallback(fields) {
+    var subject = encodeURIComponent('Vetting details (application ' + applicationId + ')');
+    var lines = [];
+    Object.keys(fields).forEach(function (key) {
+      lines.push(key + ': ' + (fields[key] || 'n/a'));
+    });
+    var body = encodeURIComponent(lines.join('\n'));
+    window.location.href = 'mailto:brian@responsa.io?subject=' + subject + '&body=' + body;
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    var resumeUrl = document.getElementById('resume').value.trim();
+    var businessStructure = document.getElementById('business-structure').value.trim();
+    var samUei = document.getElementById('sam-uei').value.trim();
+    var socioEconomicStatus = document.getElementById('socio-economic').value.trim();
+    var clearance = document.getElementById('clearance').value.trim();
+    var citizenship = document.getElementById('citizenship').value.trim();
+    var degree = document.getElementById('degree').value.trim();
+    var rateRange = document.getElementById('rate-range').value.trim();
+    var contractTypeExperience = document.getElementById('contract-type').value.trim();
+    var honeypot = document.getElementById('website').value;
+
+    if (!resumeUrl) {
+      showStatus('error', 'A resume link is required — the rest is optional.');
+      return;
+    }
+
+    var urlPattern = /^https?:\/\/\S+\.\S+/;
+    if (!urlPattern.test(resumeUrl)) {
+      showStatus('error', "That doesn't look like a full link — make sure it starts with https:// (e.g. https://docs.google.com/...).");
+      return;
+    }
+
+    submitBtn.disabled = true;
+    showStatus('success', 'Sending...');
+
+    fetch(SUBMIT_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        applicationId: applicationId,
+        token: token,
+        resumeUrl: resumeUrl,
+        businessStructure: businessStructure || null,
+        samUei: samUei || null,
+        socioEconomicStatus: socioEconomicStatus || null,
+        clearance: clearance || null,
+        citizenship: citizenship || null,
+        degree: degree || null,
+        rateRange: rateRange || null,
+        contractTypeExperience: contractTypeExperience || null,
+        website: honeypot
+      })
+    })
+      .then(function (res) {
+        if (res.status === 400) {
+          return res.json().then(function (data) {
+            var err = new Error('validation_failed');
+            err.field = data && data.field;
+            throw err;
+          });
+        }
+        if (res.status === 404) throw new Error('link_invalid');
+        if (!res.ok) throw new Error('request_failed');
+        return res.json();
+      })
+      .then(function () {
+        form.reset();
+        submitBtn.disabled = false;
+        showStatus('success', "Thanks — we've got your details. We'll follow up as we finish reviewing.");
+      })
+      .catch(function (err) {
+        submitBtn.disabled = false;
+        if (err && err.message === 'validation_failed') {
+          var fieldLabels = {
+            resumeUrl: 'your resume link',
+            businessStructure: 'business structure',
+            samUei: 'SAM.gov UEI',
+            socioEconomicStatus: 'set-aside / socio-economic status',
+            clearance: 'clearance',
+            citizenship: 'citizenship',
+            degree: 'degree',
+            rateRange: 'rate range',
+            contractTypeExperience: 'contract-type experience'
+          };
+          var label = fieldLabels[err.field] || 'one of the fields';
+          showStatus('error', 'Please check ' + label + ' and try again.');
+          return;
+        }
+        if (err && err.message === 'link_invalid') {
+          showStatus('error', "This link doesn't match an application we can find — reply to the email we sent and we'll resend it.");
+          return;
+        }
+        showStatus('error', "Something went wrong sending that automatically — opening an email instead so it still reaches us.");
+        mailtoFallback({
+          'Resume link': resumeUrl,
+          'Business structure': businessStructure,
+          'SAM.gov UEI': samUei,
+          'Set-aside status': socioEconomicStatus,
+          'Clearance': clearance,
+          'Citizenship': citizenship,
+          'Degree': degree,
+          'Rate range': rateRange,
+          'Contract-type experience': contractTypeExperience
+        });
+      });
+  });
+}
+</script>
+
+</body>
+</html>
