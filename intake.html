@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Responsa — Tell us about a requirement</title>
+<meta name="description" content="Tell Responsa about a federal requirement and get connected with vetted independent talent.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0F1E2E; --slate:#3A4A5C; --muted:#56667A; --paper:#F4F6F8; --white:#FFFFFF;
+  --rule:#C9D1D9; --field:#7C8A99; --accept:#17694D; --accept-tint:#E4F1EB;
+  --redline:#B42318; --focus:#1B5FC1; --amber:#8A5A00; --amber-tint:#FBF0DC;
+}
+:root:not([data-theme="light"]){color-scheme:light}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:'Public Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:16px;line-height:1.6;color:var(--ink);background:var(--paper)}
+h1,h2,h3{font-family:'Archivo','Public Sans',system-ui,sans-serif;font-stretch:110%;line-height:1.15;letter-spacing:-0.01em;margin:0}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:640px;margin:0 auto;padding:0 20px}
+@media (min-width:760px){.wrap{padding:0 32px}}
+header.top{border-bottom:1px solid var(--rule);background:var(--paper)}
+.top-inner{max-width:1080px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media (min-width:760px){.top-inner{padding:14px 32px}}
+.brand{font-family:'Archivo',sans-serif;font-stretch:118%;font-weight:800;font-size:1.2rem;letter-spacing:-0.02em;text-decoration:none;color:var(--ink)}
+.back{font-size:.9rem;font-weight:600;color:var(--slate);text-decoration:none}
+.back:hover{color:var(--ink);text-decoration:underline}
+main{padding:56px 0 80px}
+h1{font-size:2rem;margin-bottom:14px}
+.sub{color:var(--slate);font-size:1.05rem;margin-bottom:32px}
+.panel{background:#fff;border:1px solid var(--ink);border-radius:6px;padding:26px}
+label{display:block;font-weight:600;margin-bottom:6px;font-size:.92rem}
+.hint{color:var(--muted);font-size:.85rem;margin-bottom:6px}
+input[type=text],input[type=email],textarea{width:100%;font-family:inherit;font-size:.98rem;color:var(--ink);background:#fff;border:1.5px solid var(--field);border-radius:4px;padding:11px 12px;margin-bottom:18px}
+textarea{resize:vertical;min-height:130px;font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace;font-size:.9rem;line-height:1.5}
+input:focus,textarea:focus{border-color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:5px;font-family:inherit;font-weight:700;font-size:.98rem;border:2px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;text-decoration:none}
+.btn:hover{background:#1C3450;border-color:#1C3450}
+.btn:disabled{opacity:.6;cursor:progress}
+.disclaimer{background:var(--amber-tint);border:1px solid #E3C889;border-radius:6px;padding:16px 18px;font-size:.85rem;color:#5C3E00;margin-top:24px}
+.status-msg{font-size:.9rem;margin-top:14px;display:none}
+.status-msg.is-success{display:block;color:var(--accept);font-weight:600}
+.status-msg.is-error{display:block;color:var(--redline);font-weight:600}
+.hp-field{position:absolute;left:-9999px;top:-9999px}
+footer{border-top:1px solid var(--rule);padding:24px 0;color:var(--muted);font-size:.85rem;margin-top:40px}
+footer .wrap{max-width:1080px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <a class="brand" href="index.html">Responsa</a>
+    <a class="back" href="index.html">&larr; Back home</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <h1>Tell us about a requirement.</h1>
+    <p class="sub">This is where program offices and contracting officers get started with Responsa. Submit a requirement below — a rough need, an existing statement of work, or a position description, whatever you have — and we'll follow up to talk through next steps.</p>
+
+    <div class="panel">
+      <form id="intake-form" novalidate>
+        <label for="name">Your name</label>
+        <input type="text" id="name" name="name" required autocomplete="name">
+
+        <label for="agency">Agency / office</label>
+        <input type="text" id="agency" name="agency" required autocomplete="organization">
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required autocomplete="email">
+
+        <label for="requirement">What do you need done?</label>
+        <p class="hint">A short description is fine — a paragraph, a copied excerpt, or a link to something we can look at together.</p>
+        <textarea id="requirement" name="requirement" required></textarea>
+
+        <!-- Honeypot: hidden from real visitors via CSS, invisible to
+             screen readers, left blank by humans. See join.html for the
+             same pattern. -->
+        <div class="hp-field" aria-hidden="true">
+          <label for="website">Website</label>
+          <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+
+        <button class="btn" type="submit" id="submit-btn">Send it over</button>
+        <p class="status-msg" id="status-msg" role="status"></p>
+      </form>
+    </div>
+
+    <div class="disclaimer">
+      <strong>Early access.</strong> Responsa is in limited early release. Please don't include classified, CUI, export-controlled, or source-selection-sensitive material in this form.
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Responsa</span>
+    <a href="mailto:brian@responsa.io">brian@responsa.io</a>
+  </div>
+</footer>
+
+<script>
+// Points at the tool's Vercel project, which hosts this endpoint (see
+// api/agency-inquiry.js in the responsa-app repo). Update this if the
+// tool's domain changes (e.g. once app.responsa.io is attached) - same
+// note as join.html's APPLY_ENDPOINT.
+var SUBMIT_ENDPOINT = 'https://responsa-app.vercel.app/api/agency-inquiry';
+
+var form = document.getElementById('intake-form');
+var submitBtn = document.getElementById('submit-btn');
+var statusMsg = document.getElementById('status-msg');
+
+function showStatus(kind, text) {
+  statusMsg.textContent = text;
+  statusMsg.className = 'status-msg is-' + kind;
+}
+
+function mailtoFallback(name, agency, email, requirement) {
+  var subject = encodeURIComponent('Requirement from ' + (agency || name));
+  var body = encodeURIComponent(
+    'Name: ' + name + '\n' +
+    'Agency/office: ' + agency + '\n' +
+    'Email: ' + email + '\n\n' +
+    'Requirement:\n' + requirement
+  );
+  window.location.href = 'mailto:brian@responsa.io?subject=' + subject + '&body=' + body;
+}
+
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  var name = document.getElementById('name').value.trim();
+  var agency = document.getElementById('agency').value.trim();
+  var email = document.getElementById('email').value.trim();
+  var requirement = document.getElementById('requirement').value.trim();
+  var honeypot = document.getElementById('website').value;
+
+  if (!name || !agency || !email || !requirement) {
+    showStatus('error', 'Please fill in your name, agency, email, and what you need done.');
+    return;
+  }
+
+  // Mirrors the server-side check in api/agency-inquiry.js, so an
+  // obviously-incomplete email is caught instantly instead of round-
+  // tripping to the server first.
+  var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailPattern.test(email)) {
+    showStatus('error', "That email address looks incomplete — double-check it (e.g. name@example.com).");
+    return;
+  }
+
+  submitBtn.disabled = true;
+  showStatus('success', 'Sending...');
+
+  fetch(SUBMIT_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contactName: name,
+      agencyName: agency,
+      contactEmail: email,
+      requirementText: requirement,
+      website: honeypot
+    })
+  })
+    .then(function (res) {
+      if (res.status === 400) {
+        // A validation problem with what was actually typed in - not a
+        // system failure, so this reads as "fix this field," not
+        // "something's broken." No mailto fallback: the data itself is
+        // what needs to change.
+        return res.json().then(function (data) {
+          var err = new Error('validation_failed');
+          err.field = data && data.field;
+          throw err;
+        });
+      }
+      if (!res.ok) throw new Error('request_failed');
+      return res.json();
+    })
+    .then(function () {
+      form.reset();
+      submitBtn.disabled = false;
+      showStatus('success', "Thanks — we've got your requirement and will follow up soon.");
+    })
+    .catch(function (err) {
+      submitBtn.disabled = false;
+      if (err && err.message === 'validation_failed') {
+        var fieldLabels = {
+          contactName: 'your name',
+          agencyName: 'your agency/office',
+          contactEmail: 'your email address (double-check it\'s complete, e.g. name@example.com)',
+          requirementText: 'the requirement description'
+        };
+        var label = fieldLabels[err.field] || 'one of the fields';
+        showStatus('error', 'Please check ' + label + ' and try again.');
+        return;
+      }
+      showStatus('error', "Something went wrong sending that automatically — opening an email instead so it still reaches us.");
+      mailtoFallback(name, agency, email, requirement);
+    });
+});
+</script>
+
+</body>
+</html>
