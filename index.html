@@ -71,6 +71,14 @@ main{padding:0 0 80px}
 .disclaimer{background:var(--amber-tint);border:1px solid #E3C889;border-radius:6px;padding:18px 20px;font-size:.88rem;color:#5C3E00;margin-top:8px}
 .disclaimer strong{color:#5C3E00}
 
+.res-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:8px}
+@media (min-width:640px){.res-grid{grid-template-columns:repeat(3,1fr)}}
+.res-card{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:10px}
+.res-card .icon{font-size:1.4rem;line-height:1}
+.res-card h3{font-size:1.02rem}
+.res-card p{font-size:.9rem;color:var(--slate);flex:1}
+.res-card .soon{align-self:flex-start;font-size:.72rem;font-weight:700;color:var(--amber);background:var(--amber-tint);padding:3px 9px;border-radius:20px}
+
 .closing{padding:60px 0;text-align:center}
 .closing h2{font-size:1.7rem;max-width:32rem;margin:0 auto 14px}
 .closing p{color:var(--slate);max-width:34rem;margin:0 auto 26px}
@@ -88,6 +96,7 @@ footer .foot-inner{display:flex;justify-content:space-between;gap:16px;flex-wrap
       <a href="#how-it-works">How it works</a>
       <a href="intake.html">For agencies</a>
       <a href="join.html">For consultants</a>
+      <a href="#resources">Resources</a>
       <a href="mailto:brian@responsa.io">Get in touch</a>
     </nav>
   </div>
@@ -148,6 +157,33 @@ footer .foot-inner{display:flex;justify-content:space-between;gap:16px;flex-wrap
           <h3>For independent consultants &amp; micro businesses</h3>
           <p>Join a vetted community of specialized professionals who work directly with federal program offices on well-defined engagements.</p>
           <a class="btn btn-quiet" href="join.html">Join the network</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="resources">
+    <div class="wrap">
+      <h2>Resources for independent consultants</h2>
+      <p class="lede">Background reading for anyone weighing federal contracting work as an independent — whether or not you've applied yet.</p>
+      <div class="res-grid">
+        <div class="res-card">
+          <span class="icon">📄</span>
+          <h3>Setting up an LLC or S-Corp</h3>
+          <p>What to know before you register a business entity for federal contracting work.</p>
+          <span class="soon">Coming soon</span>
+        </div>
+        <div class="res-card">
+          <span class="icon">🏛️</span>
+          <h3>Federal contracting 101</h3>
+          <p>SAM.gov registration, contract vehicles, and how CLINs and contract types actually work.</p>
+          <span class="soon">Coming soon</span>
+        </div>
+        <div class="res-card">
+          <span class="icon">🩺</span>
+          <h3>Health insurance for independents</h3>
+          <p>Options for coverage when you're not working through a W-2 employer.</p>
+          <span class="soon">Coming soon</span>
         </div>
       </div>
     </div>
