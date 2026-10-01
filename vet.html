@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Responsa — Vetting details</title>
 <meta name="description" content="A few more details Responsa needs to finish vetting your application.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -130,9 +133,10 @@ footer .wrap{max-width:1080px;display:flex;justify-content:space-between;gap:16p
 </footer>
 
 <script>
-// Points at the tool's Vercel project - same note as join.html/intake.html's
-// endpoint constants. Update this if the tool's domain changes.
-var SUBMIT_ENDPOINT = 'https://responsa-app.vercel.app/api/vet-consultant';
+// Points at the tool's custom domain - switched from responsa-app.vercel.app
+// to app.responsa.io on 2026-10-01, same note as join.html/intake.html's
+// endpoint constants.
+var SUBMIT_ENDPOINT = 'https://app.responsa.io/api/vet-consultant';
 
 var params = new URLSearchParams(window.location.search);
 var applicationId = params.get('id');

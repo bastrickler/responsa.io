@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Responsa — Join the network</title>
 <meta name="description" content="Join Responsa's vetted network of independent government consultants and micro businesses.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -122,10 +125,11 @@ footer .wrap{max-width:1080px;display:flex;justify-content:space-between;gap:16p
 </footer>
 
 <script>
-// Points at the tool's Vercel project, which hosts this endpoint (see
-// api/consultant-apply.js in the responsa-app repo). Update this if the
-// tool's domain changes (e.g. once app.responsa.io is attached).
-var APPLY_ENDPOINT = 'https://responsa-app.vercel.app/api/consultant-apply';
+// Points at the tool's custom domain (api/consultant-apply.js in the
+// responsa-app repo). Switched from responsa-app.vercel.app to
+// app.responsa.io on 2026-10-01 - the old .vercel.app URL still works as a
+// fallback, Vercel doesn't remove it when a custom domain is attached.
+var APPLY_ENDPOINT = 'https://app.responsa.io/api/consultant-apply';
 
 var form = document.getElementById('join-form');
 var submitBtn = document.getElementById('submit-btn');

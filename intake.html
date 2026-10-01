@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Responsa — Tell us about a requirement</title>
 <meta name="description" content="Tell Responsa about a federal requirement and get connected with vetted independent talent.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -111,11 +114,10 @@ footer .wrap{max-width:1080px;display:flex;justify-content:space-between;gap:16p
 </footer>
 
 <script>
-// Points at the tool's Vercel project, which hosts this endpoint (see
-// api/agency-inquiry.js in the responsa-app repo). Update this if the
-// tool's domain changes (e.g. once app.responsa.io is attached) - same
-// note as join.html's APPLY_ENDPOINT.
-var SUBMIT_ENDPOINT = 'https://responsa-app.vercel.app/api/agency-inquiry';
+// Points at the tool's custom domain (api/agency-inquiry.js in the
+// responsa-app repo). Switched from responsa-app.vercel.app to
+// app.responsa.io on 2026-10-01 - same note as join.html's APPLY_ENDPOINT.
+var SUBMIT_ENDPOINT = 'https://app.responsa.io/api/agency-inquiry';
 
 var form = document.getElementById('intake-form');
 var submitBtn = document.getElementById('submit-btn');
