@@ -71,13 +71,16 @@ main{padding:0 0 80px}
 .disclaimer{background:var(--amber-tint);border:1px solid #E3C889;border-radius:6px;padding:18px 20px;font-size:.88rem;color:#5C3E00;margin-top:8px}
 .disclaimer strong{color:#5C3E00}
 
-.res-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:8px}
-@media (min-width:640px){.res-grid{grid-template-columns:repeat(3,1fr)}}
-.res-card{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:10px}
-.res-card .icon{font-size:1.4rem;line-height:1}
-.res-card h3{font-size:1.02rem}
-.res-card p{font-size:.9rem;color:var(--slate);flex:1}
-.res-card .soon{align-self:flex-start;font-size:.72rem;font-weight:700;color:var(--amber);background:var(--amber-tint);padding:3px 9px;border-radius:20px}
+.faq-list{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.faq-item{background:#fff;border:1px solid var(--rule);border-radius:6px}
+.faq-item summary{list-style:none;cursor:pointer;padding:16px 20px;font-weight:700;font-size:.98rem;display:flex;justify-content:space-between;align-items:center;gap:14px}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary .q{flex:1}
+.faq-item summary .chev{display:inline-block;color:var(--muted);font-weight:400;font-size:1.3rem;flex-shrink:0;line-height:1;transition:transform .15s ease}
+.faq-item[open] summary .chev{transform:rotate(45deg)}
+.faq-item .faq-a{padding:0 20px 18px;color:var(--slate);font-size:.92rem;max-width:42rem}
+.faq-item .faq-a p + p{margin-top:8px}
+.faq-note{margin-top:18px;font-size:.88rem;color:var(--muted)}
 
 .closing{padding:60px 0;text-align:center}
 .closing h2{font-size:1.7rem;max-width:32rem;margin:0 auto 14px}
@@ -164,28 +167,43 @@ footer .foot-inner{display:flex;justify-content:space-between;gap:16px;flex-wrap
 
   <section class="band" id="resources">
     <div class="wrap">
-      <h2>Resources for independent consultants</h2>
-      <p class="lede">Background reading for anyone weighing federal contracting work as an independent — whether or not you've applied yet.</p>
-      <div class="res-grid">
-        <div class="res-card">
-          <span class="icon">📄</span>
-          <h3>Setting up an LLC or S-Corp</h3>
-          <p>What to know before you register a business entity for federal contracting work.</p>
-          <span class="soon">Coming soon</span>
-        </div>
-        <div class="res-card">
-          <span class="icon">🏛️</span>
-          <h3>Federal contracting 101</h3>
-          <p>SAM.gov registration, contract vehicles, and how CLINs and contract types actually work.</p>
-          <span class="soon">Coming soon</span>
-        </div>
-        <div class="res-card">
-          <span class="icon">🩺</span>
-          <h3>Health insurance for independents</h3>
-          <p>Options for coverage when you're not working through a W-2 employer.</p>
-          <span class="soon">Coming soon</span>
-        </div>
+      <h2>Questions from independent consultants</h2>
+      <p class="lede">A few things people usually want to know before applying.</p>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary><span class="q">Do I need an LLC to apply, or can I work as a sole proprietor?</span><span class="chev">+</span></summary>
+          <div class="faq-a">
+            <p>You can apply as a sole proprietor — no formal entity required to submit an application. Many independents do form an LLC or S-Corp once work becomes steady, mainly for liability protection, but that's a decision worth making with an accountant on your own timeline, not a prerequisite here.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary><span class="q">What's SAM.gov registration, and do I need it before I apply?</span><span class="chev">+</span></summary>
+          <div class="faq-a">
+            <p>SAM.gov is the federal government's registry of entities eligible for contract awards — free, but it can take a couple of weeks to clear. You don't need it to apply; we only ask for your SAM.gov Unique Entity ID (UEI) during vetting, after you're approved.</p>
+            <p>If you don't have one yet, that's fine — just know you won't be matched to opportunities until it's complete, so it's worth starting the process as soon as you're invited to vet.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary><span class="q">What's the difference between FFP, FFP-LOE, and T&amp;M contracts — and why does it matter to me?</span><span class="chev">+</span></summary>
+          <div class="faq-a">
+            <p>FFP (Firm-Fixed-Price) pays a set price for a defined deliverable, regardless of hours. FFP-LOE (Firm-Fixed-Price, Level-of-Effort) pays a fixed price for a specified level of effort over a set period, rather than a deliverable. T&amp;M (Time-and-Materials) pays for actual hours at an agreed rate.</p>
+            <p>It matters because it changes how you scope and price your time — we work to convert T&amp;M-style requirements into FFP or FFP-LOE wherever possible, since those tend to be simpler for independents to manage.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary><span class="q">How does Responsa's vetting process work?</span><span class="chev">+</span></summary>
+          <div class="faq-a">
+            <p>After you apply, we review your initial submission; approved applicants get a short follow-up form for more detail (resume link, SAM.gov UEI, clearance status, relevant contract-type experience). Once that's in, you get a real account and show up as available in our network. Nothing about you is shared with agencies before that point.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary><span class="q">What about health insurance and benefits as an independent?</span><span class="chev">+</span></summary>
+          <div class="faq-a">
+            <p>You're generally responsible for your own coverage — the government doesn't provide benefits to contractors directly. Common paths are ACA marketplace plans, a spouse's employer plan, or a professional-association group plan. For your specific situation, a licensed health insurance broker is the most reliable source.</p>
+          </div>
+        </details>
       </div>
+      <p class="faq-note">More detailed guides on all of this are available to vetted members.</p>
     </div>
   </section>
 
