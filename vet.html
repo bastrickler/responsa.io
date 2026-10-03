@@ -75,10 +75,9 @@ footer .wrap{max-width:1080px;display:flex;justify-content:space-between;gap:16p
 
       <div class="panel">
         <form id="vet-form" novalidate>
-          <label for="resume">Resume (PDF or Word)</label>
-          <p class="hint" style="margin-top:-4px;margin-bottom:10px">Upload whatever resume you have right now — any format is fine to get vetted. Up to 3MB.</p>
-          <input type="file" id="resume" name="resume" required accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
-          <p class="hint" style="margin-top:0;margin-bottom:18px">Want to optimize it for matching once you're in? <a href="https://docs.google.com/document/d/1CQ_-rJOXZNbKCH20dKIvloSzkjCogExVSgv_6aR-qu4/edit" target="_blank" rel="noopener" style="color:var(--focus);text-decoration:underline">use our fill-in template</a> or <a href="responsa-resume-guide.pdf" target="_blank" rel="noopener" style="color:var(--focus);text-decoration:underline">see the 2-page guide</a> — not required here, just worth knowing about.</p>
+          <label for="resume">Resume (PDF or Word, up to 3MB)</label>
+          <p class="hint" style="margin-top:-4px;margin-bottom:18px">Upload what you have — any format works to get vetted. (Optional: <a href="https://docs.google.com/document/d/1CQ_-rJOXZNbKCH20dKIvloSzkjCogExVSgv_6aR-qu4/edit" target="_blank" rel="noopener" style="color:var(--focus);text-decoration:underline">use our fill-in template</a> for better matching later.)</p>
+          <input type="file" id="resume" name="resume" required accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="margin-bottom:18px">
 
           <label for="business-structure">Business structure <span class="optional">(optional)</span></label>
           <input type="text" id="business-structure" name="business-structure" placeholder="e.g. single-person LLC, sole proprietor, small team">
@@ -112,13 +111,15 @@ footer .wrap{max-width:1080px;display:flex;justify-content:space-between;gap:16p
             <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
           </div>
 
+          <p class="hint" style="margin-top:-6px;margin-bottom:16px">Don't worry about getting every field perfect — once you're a member, you'll be able to update most of this yourself.</p>
+
           <button class="btn" type="submit" id="submit-btn">Submit</button>
           <p class="status-msg" id="status-msg" role="status"></p>
         </form>
       </div>
 
       <div class="disclaimer">
-        <strong>Early access.</strong> Responsa is in limited early release. Please don't include classified, CUI, or export-controlled material in anything you submit here.
+        <strong>Early access.</strong> Responsa is in limited early release. Please don't include classified, CUI, or export-controlled material in anything you submit here. Have feedback on this form? <a href="mailto:brian@responsa.io" style="text-decoration:underline">Let us know</a>.
       </div>
     </div>
   </div>
