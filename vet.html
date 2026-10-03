@@ -39,6 +39,7 @@ label{display:block;font-weight:600;margin-bottom:6px;font-size:.92rem}
 .hint{color:var(--muted);font-size:.85rem;margin-bottom:6px}
 .optional{font-weight:500;color:var(--muted)}
 input[type=text],input[type=url]{width:100%;font-family:inherit;font-size:.98rem;color:var(--ink);background:#fff;border:1.5px solid var(--field);border-radius:4px;padding:11px 12px;margin-bottom:18px}
+input[type=file]{width:100%;font-family:inherit;font-size:.92rem;color:var(--ink);background:#fff;border:1.5px dashed var(--field);border-radius:4px;padding:11px 12px;margin-bottom:6px}
 input:focus{border-color:var(--ink)}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:5px;font-family:inherit;font-weight:700;font-size:.98rem;border:2px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;text-decoration:none}
 .btn:hover{background:#1C3450;border-color:#1C3450}
@@ -74,9 +75,10 @@ footer .wrap{max-width:1080px;display:flex;justify-content:space-between;gap:16p
 
       <div class="panel">
         <form id="vet-form" novalidate>
-          <label for="resume">Resume link <span class="optional">(a 1–2 page Google Doc link works well — please make sure it's viewable by anyone with the link)</span></label>
-          <p class="hint" style="margin-top:-4px;margin-bottom:10px">Not sure how to structure it? <a href="responsa-resume-guide.pdf" target="_blank" rel="noopener" style="color:var(--focus);text-decoration:underline">See our 2-page resume guide</a> — built around what contracting officers and program managers actually look for. Prefer something to fill in directly? <a href="https://docs.google.com/document/d/1CQ_-rJOXZNbKCH20dKIvloSzkjCogExVSgv_6aR-qu4/edit" target="_blank" rel="noopener" style="color:var(--focus);text-decoration:underline">Use our fill-in template</a> (File &rarr; Make a copy, then edit your copy).</p>
-          <input type="url" id="resume" name="resume" required placeholder="https://docs.google.com/...">
+          <label for="resume">Resume (PDF or Word)</label>
+          <p class="hint" style="margin-top:-4px;margin-bottom:10px">Upload whatever resume you have right now — any format is fine to get vetted. Up to 3MB.</p>
+          <input type="file" id="resume" name="resume" required accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+          <p class="hint" style="margin-top:0;margin-bottom:18px">Want to optimize it for matching once you're in? <a href="https://docs.google.com/document/d/1CQ_-rJOXZNbKCH20dKIvloSzkjCogExVSgv_6aR-qu4/edit" target="_blank" rel="noopener" style="color:var(--focus);text-decoration:underline">use our fill-in template</a> or <a href="responsa-resume-guide.pdf" target="_blank" rel="noopener" style="color:var(--focus);text-decoration:underline">see the 2-page guide</a> — not required here, just worth knowing about.</p>
 
           <label for="business-structure">Business structure <span class="optional">(optional)</span></label>
           <input type="text" id="business-structure" name="business-structure" placeholder="e.g. single-person LLC, sole proprietor, small team">
@@ -156,9 +158,16 @@ if (!applicationId || !token) {
     statusMsg.className = 'status-msg is-' + kind;
   }
 
+  var MAX_RESUME_BYTES = 3 * 1024 * 1024;
+  var ALLOWED_RESUME_EXTENSIONS = ['pdf', 'doc', 'docx'];
+
+  // A file can't travel through a mailto: link the way text fields can, so
+  // the fallback here can only carry the other fields plus an instruction
+  // to attach the resume by hand - this is the one place this form's
+  // fallback can't fully stand in for the real submission.
   function mailtoFallback(fields) {
     var subject = encodeURIComponent('Vetting details (application ' + applicationId + ')');
-    var lines = [];
+    var lines = ['Please attach your resume file to this email before sending.', ''];
     Object.keys(fields).forEach(function (key) {
       lines.push(key + ': ' + (fields[key] || 'n/a'));
     });
@@ -166,10 +175,24 @@ if (!applicationId || !token) {
     window.location.href = 'mailto:brian@responsa.io?subject=' + subject + '&body=' + body;
   }
 
+  function readFileAsBase64(file) {
+    return new Promise(function (resolve, reject) {
+      var reader = new FileReader();
+      reader.onload = function () {
+        // result is "data:<mime>;base64,<data>" - strip the prefix.
+        var result = String(reader.result || '');
+        var commaIndex = result.indexOf(',');
+        resolve(commaIndex >= 0 ? result.slice(commaIndex + 1) : '');
+      };
+      reader.onerror = function () { reject(reader.error); };
+      reader.readAsDataURL(file);
+    });
+  }
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
 
-    var resumeUrl = document.getElementById('resume').value.trim();
+    var resumeFile = document.getElementById('resume').files[0];
     var businessStructure = document.getElementById('business-structure').value.trim();
     var samUei = document.getElementById('sam-uei').value.trim();
     var socioEconomicStatus = document.getElementById('socio-economic').value.trim();
@@ -180,38 +203,47 @@ if (!applicationId || !token) {
     var contractTypeExperience = document.getElementById('contract-type').value.trim();
     var honeypot = document.getElementById('website').value;
 
-    if (!resumeUrl) {
-      showStatus('error', 'A resume link is required — the rest is optional.');
+    if (!resumeFile) {
+      showStatus('error', 'A resume file is required — the rest is optional.');
       return;
     }
 
-    var urlPattern = /^https?:\/\/\S+\.\S+/;
-    if (!urlPattern.test(resumeUrl)) {
-      showStatus('error', "That doesn't look like a full link — make sure it starts with https:// (e.g. https://docs.google.com/...).");
+    var extMatch = /\.([a-zA-Z0-9]+)$/.exec(resumeFile.name || '');
+    var ext = extMatch ? extMatch[1].toLowerCase() : '';
+    if (ALLOWED_RESUME_EXTENSIONS.indexOf(ext) === -1) {
+      showStatus('error', 'Please upload a PDF or Word document (.pdf, .doc, .docx).');
+      return;
+    }
+    if (resumeFile.size > MAX_RESUME_BYTES) {
+      showStatus('error', 'That file is a bit large — please keep it under 3MB.');
       return;
     }
 
     submitBtn.disabled = true;
     showStatus('success', 'Sending...');
 
-    fetch(SUBMIT_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        applicationId: applicationId,
-        token: token,
-        resumeUrl: resumeUrl,
-        businessStructure: businessStructure || null,
-        samUei: samUei || null,
-        socioEconomicStatus: socioEconomicStatus || null,
-        clearance: clearance || null,
-        citizenship: citizenship || null,
-        degree: degree || null,
-        rateRange: rateRange || null,
-        contractTypeExperience: contractTypeExperience || null,
-        website: honeypot
+    readFileAsBase64(resumeFile)
+      .then(function (resumeFileBase64) {
+        return fetch(SUBMIT_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            applicationId: applicationId,
+            token: token,
+            resumeFileBase64: resumeFileBase64,
+            resumeFileName: resumeFile.name,
+            businessStructure: businessStructure || null,
+            samUei: samUei || null,
+            socioEconomicStatus: socioEconomicStatus || null,
+            clearance: clearance || null,
+            citizenship: citizenship || null,
+            degree: degree || null,
+            rateRange: rateRange || null,
+            contractTypeExperience: contractTypeExperience || null,
+            website: honeypot
+          })
+        });
       })
-    })
       .then(function (res) {
         if (res.status === 400) {
           return res.json().then(function (data) {
@@ -233,7 +265,9 @@ if (!applicationId || !token) {
         submitBtn.disabled = false;
         if (err && err.message === 'validation_failed') {
           var fieldLabels = {
-            resumeUrl: 'your resume link',
+            resumeFile: 'your resume file',
+            resumeFileType: 'your resume file (must be .pdf, .doc, or .docx)',
+            resumeFileSize: 'your resume file (must be under 3MB)',
             businessStructure: 'business structure',
             samUei: 'SAM.gov UEI',
             socioEconomicStatus: 'set-aside / socio-economic status',
@@ -251,9 +285,8 @@ if (!applicationId || !token) {
           showStatus('error', "This link doesn't match an application we can find — reply to the email we sent and we'll resend it.");
           return;
         }
-        showStatus('error', "Something went wrong sending that automatically — opening an email instead so it still reaches us.");
+        showStatus('error', "Something went wrong sending that automatically — opening an email instead so it still reaches us. Please attach your resume file to that email.");
         mailtoFallback({
-          'Resume link': resumeUrl,
           'Business structure': businessStructure,
           'SAM.gov UEI': samUei,
           'Set-aside status': socioEconomicStatus,
