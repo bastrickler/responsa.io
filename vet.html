@@ -99,7 +99,7 @@ footer .wrap{max-width:1080px;display:flex;justify-content:space-between;gap:16p
           <label for="degree">Degree <span class="optional">(optional)</span></label>
           <input type="text" id="degree" name="degree" placeholder="e.g. B.S. Computer Science">
 
-          <label for="rate-range">Rate range <span class="optional">(optional)</span></label>
+          <label for="rate-range">Target rate range <span class="optional">(optional)</span></label>
           <input type="text" id="rate-range" name="rate-range" placeholder="e.g. $85-110/hr">
 
           <label for="contract-type">Contract-type experience <span class="optional">(optional)</span></label>
@@ -274,7 +274,7 @@ if (!applicationId || !token) {
             clearance: 'clearance',
             citizenship: 'citizenship',
             degree: 'degree',
-            rateRange: 'rate range',
+            rateRange: 'target rate range',
             contractTypeExperience: 'contract-type experience'
           };
           var label = fieldLabels[err.field] || 'one of the fields';
@@ -293,7 +293,7 @@ if (!applicationId || !token) {
           'Clearance': clearance,
           'Citizenship': citizenship,
           'Degree': degree,
-          'Rate range': rateRange,
+          'Target rate range': rateRange,
           'Contract-type experience': contractTypeExperience
         });
       });
