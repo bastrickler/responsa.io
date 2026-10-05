@@ -66,11 +66,11 @@ main{padding:0 0 80px}
 .band.dark a{color:#8FB8FF}
 
 .chain{display:flex;position:relative;margin-top:40px}
-.chain::before{content:"";position:absolute;top:9px;left:0;right:0;height:2px;background:var(--rule)}
+.chain::before{content:"";position:absolute;top:17px;left:0;right:0;height:2px;background:rgba(255,255,255,.18)}
 .chain-step{flex:1;position:relative;padding:0 16px;z-index:1}
 .chain-step:first-child{padding-left:0}
 .chain-step:last-child{padding-right:0}
-.chain-dot{width:20px;height:20px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:.68rem;font-weight:700;margin-bottom:16px}
+.chain-dot{width:34px;height:34px;border-radius:50%;background:var(--mid);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:.78rem;font-weight:700;margin-bottom:16px}
 @media (max-width:760px){
   .chain{flex-direction:column;gap:22px;margin-top:28px}
   .chain::before{display:none}
@@ -78,6 +78,17 @@ main{padding:0 0 80px}
 }
 .chain-step h3{font-size:1.02rem;margin-bottom:6px}
 .chain-step p{font-size:.92rem;color:var(--slate)}
+
+.flow{display:flex;align-items:flex-start;gap:0;margin-top:36px;flex-wrap:wrap}
+.flow .flow-seg{flex:1;min-width:200px}
+.flow h3{font-size:1.05rem;margin-bottom:6px}
+.flow p{font-size:.88rem;color:var(--slate)}
+.flow .arrow{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--mid-tint);display:flex;align-items:center;justify-content:center;margin:-8px 20px 0}
+.flow .arrow svg{width:18px;height:18px}
+@media (max-width:760px){
+  .flow{flex-direction:column;gap:22px;margin-top:28px}
+  .flow .arrow{display:none}
+}
 
 .split{display:grid;grid-template-columns:1fr;gap:16px;margin-top:8px}
 @media (min-width:760px){.split{grid-template-columns:1fr 1fr}}
@@ -145,9 +156,9 @@ footer .foot-inner{display:flex;justify-content:space-between;gap:16px;flex-wrap
     </div>
   </section>
 
-  <section class="band" id="how-it-works">
+  <section class="band dark" id="how-it-works">
     <div class="wrap">
-      <h2>How it works</h2>
+      <h2>How it works for agencies</h2>
       <p class="lede">One conversation with your program office. A short, structured process on our side. A qualified shortlist on the other end.</p>
       <div class="chain">
         <div class="chain-step">
@@ -194,6 +205,29 @@ footer .foot-inner{display:flex;justify-content:space-between;gap:16px;flex-wrap
           <h3>For independent consultants &amp; micro businesses</h3>
           <p>Get matched to federal engagements that fit your specialty, plus support to grow a real business around them.</p>
           <a class="btn btn-quiet" href="join.html">Join the network</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <h2>How it works for consultants</h2>
+      <p class="lede">What to expect once you apply.</p>
+      <div class="flow">
+        <div class="flow-seg">
+          <h3>Join Responsa</h3>
+          <p>Apply and tell us what you do. We review applications as we bring on new members.</p>
+        </div>
+        <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="var(--mid)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        <div class="flow-seg">
+          <h3>Build your business</h3>
+          <p>Get contracting guidance and connect with the network — before and after you match.</p>
+        </div>
+        <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="var(--mid)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        <div class="flow-seg">
+          <h3>Get matched</h3>
+          <p>When a fitting opportunity comes through, we bring it to you.</p>
         </div>
       </div>
     </div>
